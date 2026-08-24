@@ -305,6 +305,8 @@
     }
   ];
 
+  window.ETH_COURSES = COURSES;
+
   var header = document.querySelector(".site-header");
   var navToggle = document.querySelector(".nav-toggle");
   var mainNav = document.querySelector(".main-nav");
