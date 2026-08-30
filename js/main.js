@@ -307,6 +307,89 @@
 
   window.ETH_COURSES = COURSES;
 
+  /* ---------------- admin catalog merge (published admin courses) ---------------- */
+
+  function toPublicCourse(c) {
+    var modules = c.modules || [];
+    var lessonTotal = 0;
+    var examTotal = 0;
+    var videoTotal = 0;
+    var titles = [];
+    modules.forEach(function (m) {
+      var ls = m.lessons || [];
+      if (m.title) titles.push(m.title);
+      lessonTotal += ls.length;
+      if (m.examEnabled && m.exam && (m.exam.questions || []).length) examTotal++;
+      ls.forEach(function (l) {
+        if (l.video && l.video.type === "file" && l.video.src) videoTotal++;
+        else if (l.video && l.video.type === "url" && l.video.url) videoTotal++;
+      });
+    });
+
+    var specs = [
+      { label: modules.length + " Module" + (modules.length === 1 ? "" : "s"), sub: "Structured modules" },
+      { label: String(lessonTotal) + (lessonTotal === 1 ? " Lesson" : " Lessons"), sub: "Total lessons" },
+      { label: examTotal ? String(examTotal) + (examTotal === 1 ? " Exam" : " Exams") : "No Exams", sub: examTotal ? "Module assessments" : "Learn at your own pace" },
+      { label: c.duration || "Self-Paced", sub: "Course duration" },
+      { label: c.level || "All Levels", sub: "Skill level" },
+      { label: "Certificate", sub: "Certificate of completion" }
+    ];
+
+    var outcomes = ["Complete " + modules.length + " guided module" + (modules.length === 1 ? "" : "s") + " of structured learning"];
+    if (examTotal) {
+      outcomes.push("Pass " + examTotal + " module exam" + (examTotal === 1 ? "" : "s") + " to test your understanding");
+    } else {
+      outcomes.push("Work through every lesson at your own pace");
+    }
+    if (titles.length) outcomes.push("Modules: " + titles.join("\u00b7"));
+    outcomes.push("Earn a certificate of completion when you finish");
+
+    var formatDetails = [
+      "Learn module by module \u2014 each one builds on the last",
+      videoTotal ? "Watch " + videoTotal + " video lesson" + (videoTotal === 1 ? "" : "s") + " as you progress" : "Every lesson includes clear written material you can study at your own pace",
+      examTotal ? "Every module ends with an exam that checks your understanding" : "Track your progress and retake quizzes to improve your best score",
+      "Certificate of completion when you finish"
+    ];
+
+    return {
+      id: Number(c.id),
+      title: c.title,
+      tagline: c.tagline || "",
+      desc: c.desc || "",
+      image: c.image || "images/hero.jpg",
+      price: c.price || "\u20a60",
+      priceNum: Number(c.priceNum) || 0,
+      duration: c.duration || "Self-Paced",
+      level: c.level || "All Levels",
+      format: c.format || (examTotal ? "Modules + Exams" : "Self-Paced"),
+      featured: !!c.featured,
+      cat: c.cat || "digital-skills",
+      specs: specs,
+      outcomes: outcomes,
+      audience: ["Anyone ready to learn " + c.title, "Learners who want a structured, self-paced programme", "Professionals building practical, transferable skills"],
+      formatDetails: formatDetails
+    };
+  }
+
+  function catalogCourses() {
+    if (!window.ETH || !window.ETH.readCatalog) return [];
+    var list = [];
+    try { list = window.ETH.readCatalog(); } catch (e) { return []; }
+    var out = [];
+    (list || []).forEach(function (c) {
+      if (!c || c.published === false) return;
+      if (!String(c.title || "").trim()) return;
+      out.push(toPublicCourse(c));
+    });
+    return out;
+  }
+
+  var catalog = catalogCourses();
+  if (catalog.length) {
+    COURSES = COURSES.concat(catalog);
+    window.ETH_COURSES = COURSES;
+  }
+
   var header = document.querySelector(".site-header");
   var navToggle = document.querySelector(".nav-toggle");
   var mainNav = document.querySelector(".main-nav");
@@ -329,7 +412,98 @@
       progressBar.style.width = pct + "%";
     }
 
-    if (toTop) {
+var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+  var CARD_EYE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+  function escHTML(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function productFrom(course) {
+    var opts = (course && course.options) || [];
+    if (!opts.length) return course.price || "";
+    var min = null;
+    opts.forEach(function (o) {
+      var p = Number(o && o.priceNum);
+      if (!(p > 0)) p = parseInt(String(o && o.price || "").replace(/[^\d]/g, ""), 10) || 0;
+      if (p > 0 && (min === null || p < min)) min = p;
+    });
+    if (min === null) return opts[0].price || course.price || "";
+    var best = opts[0];
+    opts.forEach(function (o) {
+      var p = Number(o.priceNum);
+      if (!(p > 0)) p = parseInt(String(o.price || "").replace(/[^\d]/g, ""), 10) || 0;
+      if (p === min) best = o;
+    });
+    return best.price || String(min);
+  }
+
+  function courseCardHTML(course) {
+    if (course.type === "product") {
+      return (
+        '<article class="course-card" data-cat="' + escHTML(course.cat) + '" data-course-id="' + course.id + '">' +
+        '<div class="course-card__thumb">' +
+        '<img src="' + escHTML(course.image) + '" alt="' + escHTML(course.title) + '">' +
+        (course.featured ? '<span class="course-card__tag course-card__tag--featured">Featured</span>' : "") +
+        "</div>" +
+        '<div class="course-card__body">' +
+        '<h3 class="course-card__title">' + escHTML(course.title) + "</h3>" +
+        '<p class="course-card__desc">' + escHTML(course.desc) + "</p>" +
+        '<div class="course-meta">' +
+        '<span class="course-meta__item">' + CARD_CLOCK_SVG + " " + escHTML(course.duration) + "</span>" +
+        '<span class="course-meta__item">' + CARD_EYE_SVG + " " + escHTML(course.level) + "</span>" +
+        "</div>" +
+        '<div class="course-card__foot">' +
+        '<span class="course-card__price">From ' + escHTML(productFrom(course)) + "<small>digital product</small></span>" +
+        '<button class="btn btn--primary course-card__getaccess" data-get-access="' + course.id + '">Get Access</button>' +
+        "</div></div></article>"
+      );
+    }
+    return (
+      '<article class="course-card" data-cat="' + escHTML(course.cat) + '" data-course-id="' + course.id + '">' +
+      '<div class="course-card__thumb">' +
+      '<img src="' + escHTML(course.image) + '" alt="' + escHTML(course.title) + '">' +
+      (course.featured ? '<span class="course-card__tag course-card__tag--featured">Featured</span>' : "") +
+      "</div>" +
+      '<div class="course-card__body">' +
+      '<h3 class="course-card__title">' + escHTML(course.title) + "</h3>" +
+      '<p class="course-card__desc">' + escHTML(course.desc) + "</p>" +
+      '<div class="course-meta">' +
+      '<span class="course-meta__item">' + CARD_CLOCK_SVG + " " + escHTML(course.duration) + "</span>" +
+      '<span class="course-meta__item">' + CARD_EYE_SVG + " " + escHTML(course.level) + "</span>" +
+      "</div>" +
+      '<div class="course-card__foot">' +
+      '<span class="course-card__price">' + escHTML(course.price) + "<small>per participant</small></span>" +
+      '<div class="course-card__buttons">' +
+      '<button class="btn btn--primary course-card__enroll" data-course-id="' + course.id + '">Enroll</button>' +
+      '<button class="btn btn--outline course-card__cart" data-course-id="' + course.id + '">Add to Cart</button>' +
+      "</div></div></div></article>"
+    );
+  }
+
+  function injectAdminCourses() {
+    var grids = [];
+    var catalogGrid = document.querySelector(".catalog-grid");
+    var miniGrid = document.querySelector(".mini-courses__grid");
+    if (catalogGrid) grids.push(catalogGrid);
+    if (miniGrid) grids.push(miniGrid);
+    if (!grids.length) return;
+    COURSES.forEach(function (course) {
+      if (course.id < 100) return;
+      if (!course.title) return;
+      grids.forEach(function (grid) {
+        if (!grid.querySelector('[data-course-id="' + course.id + '"]')) {
+          grid.insertAdjacentHTML("beforeend", courseCardHTML(course));
+        }
+      });
+    });
+  }
+
+  if (toTop) {
       toTop.classList.toggle("is-visible", window.scrollY > 500);
     }
   }
@@ -585,7 +759,8 @@
       modalTag.textContent = course.featured ? "Featured Programme" : course.level;
       modalTag.className = "course-modal__tag" + (course.featured ? " course-modal__tag--featured" : "");
       modalDesc.textContent = course.desc;
-      modalPrice.innerHTML = course.price + '<small>per participant</small>';
+      modalPrice.innerHTML = (course.type === "product" ? "From " + productFrom(course) : course.price) +
+        '<small>' + (course.type === "product" ? "digital product" : "per participant") + '</small>';
 
       modalMeta.innerHTML =
         '<span class="course-meta__item">' + clockSVG + ' ' + course.duration + '</span>' +
@@ -603,11 +778,13 @@
       }
 
       modalOutcomes.innerHTML = "";
-      course.outcomes.forEach(function (item) {
-        var li = document.createElement("li");
-        li.innerHTML = '<span class="check-list__icon">' + checkSVG + '</span><span>' + item + '</span>';
-        modalOutcomes.appendChild(li);
-      });
+      if (course.outcomes) {
+        course.outcomes.forEach(function (item) {
+          var li = document.createElement("li");
+          li.innerHTML = '<span class="check-list__icon">' + checkSVG + '</span><span>' + item + '</span>';
+          modalOutcomes.appendChild(li);
+        });
+      }
 
       modalAudience.innerHTML = "";
       if (course.audience) {
@@ -623,6 +800,31 @@
         course.formatDetails.forEach(function (item) {
           var li = document.createElement("li");
           li.innerHTML = '<span class="check-list__icon">' + checkSVG + '</span><span>' + item + '</span>';
+          modalFormat.appendChild(li);
+        });
+      }
+
+      if (course.type === "product") {
+        var enrollBtn = modal.querySelector(".course-modal__enroll-btn");
+        if (enrollBtn) {
+          enrollBtn.textContent = "Get Access";
+          enrollBtn.setAttribute("href", "#");
+          enrollBtn.onclick = function (e) {
+            e.preventDefault();
+            closeModal();
+            ETH.showAccessModal(course);
+          };
+        }
+        var note = modal.querySelector(".course-modal__note");
+        if (note) note.textContent = "Choose the format you need when you apply";
+        var fmtIntro = modal.querySelector(".course-modal__format-intro");
+        if (fmtIntro) fmtIntro.textContent = "This digital product is available in these formats:";
+        modalFormat.innerHTML = "";
+        (course.options || []).forEach(function (o) {
+          var li = document.createElement("li");
+          li.innerHTML = '<span class="check-list__icon">' + checkSVG + "</span>" +
+            "<span><b>" + escHTML(o.label) + " \u2014 " + escHTML(o.price || "") + "</b>" +
+            (o.desc ? "<br>" + escHTML(o.desc) : "") + "</span>";
           modalFormat.appendChild(li);
         });
       }
@@ -734,6 +936,22 @@
     updateCartBadge();
   }
 
+  function bindGetAccess() {
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest(".course-card__getaccess[data-get-access]");
+      if (!btn || (btn.disabled && btn.classList.contains("is-applied"))) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var id = parseInt(btn.getAttribute("data-get-access"), 10);
+      var course = null;
+      for (var i = 0; i < COURSES.length; i++) {
+        if (Number(COURSES[i].id) === id) { course = COURSES[i]; break; }
+      }
+      if (course && window.ETH && ETH.showAccessModal) ETH.showAccessModal(course);
+    });
+    if (window.ETH && ETH.refreshGetAccessButtons) ETH.refreshGetAccessButtons(null);
+  }
+
   function initEnrollButtons() {
     var number = "234803383339";
     var buttons = document.querySelectorAll("[data-enroll]");
@@ -799,9 +1017,11 @@
   initTestimonials();
   initCounters();
   initTilt();
+  injectAdminCourses();
   initFilters();
   initModal();
   initCart();
+  bindGetAccess();
   initEnrollButtons();
   initContactForm();
 

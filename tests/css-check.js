@@ -1,5 +1,5 @@
 const fs = require("fs");
-const css = fs.readFileSync("css/style.css", "utf8") + "\n" + fs.readFileSync("css/dashboard.css", "utf8");
+const css = fs.readFileSync("css/style.css", "utf8") + "\n" + fs.readFileSync("css/dashboard.css", "utf8") + "\n" + fs.readFileSync("Admin/css/admin.css", "utf8");
 const o = (css.match(/\{/g) || []).length;
 const c = (css.match(/\}/g) || []).length;
 console.log("braces:", o, "/", c, o === c ? "BALANCED" : "BROKEN");
@@ -14,7 +14,8 @@ for (const m of css.matchAll(/\.([a-zA-Z][a-zA-Z0-9_-]*)/g)) defined.add(m[1]);
 
 const htmlFiles = [
   "index.html", "courses.html", "services.html", "about.html", "contact.html",
-  "login.html", "signup.html", "forgot-password.html", "dashboard.html"
+  "login.html", "signup.html", "forgot-password.html", "dashboard.html",
+  "Admin/index.html", "Admin/login.html"
 ];
 
 const missing = [];

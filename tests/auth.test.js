@@ -103,5 +103,13 @@ t("completion in activity", ETH.getActivity(uid).some((a) => /certificate/i.test
 ETH.updateUser(uid, { lname: "Okafor-Bello" });
 t("profile update persists", ETH.currentUser().lname === "Okafor-Bello");
 
+let pm = ETH.passQuiz(uid, 3, 0, 60, 5, "Class 1", "AI for Educators", 50);
+t("custom passMark 50: 60% passes", pm.passed === true);
+t("custom passMark stored", ETH.courseProgress(uid, 3).quizzes[0].passMark === 50);
+const bestAfterPass = ETH.courseProgress(uid, 3).quizzes[0].best;
+pm = ETH.passQuiz(uid, 3, 0, 45, 5, "Class 1", "AI for Educators", 50);
+t("custom passMark 50: 45% fails", pm.passed === false);
+t("fail keeps best score", ETH.courseProgress(uid, 3).quizzes[0].best === bestAfterPass);
+
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

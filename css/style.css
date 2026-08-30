@@ -2887,7 +2887,8 @@ textarea.form-control {
 }
 
 .course-card__enroll,
-.course-card__cart {
+.course-card__cart,
+.course-card__getaccess {
   flex-shrink: 0;
 }
 
@@ -2911,6 +2912,15 @@ textarea.form-control {
   background: var(--teal-dark);
   border-color: var(--teal-dark);
   color: #fff;
+}
+
+.course-card__getaccess.is-applied,
+.course-card__getaccess:disabled {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+  opacity: 0.85;
+  cursor: default;
 }
 
 /* ── Auth Form Pages ──────────────────────────────── */
@@ -3605,4 +3615,257 @@ textarea.form-control {
   border-radius: var(--radius-sm);
   padding: 8px 16px;
   margin-top: 4px;
+}
+
+/* ── Digital Product Get Access Modal ────────────────── */
+
+.access-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(10, 16, 28, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: accessFade 0.18s ease;
+}
+
+@keyframes accessFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.access-card {
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: accessPop 0.22s ease;
+}
+
+@keyframes accessPop {
+  from { transform: translateY(14px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.access-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.access-card__head h3 {
+  font-family: var(--font-head);
+  font-size: 22px;
+  color: var(--ink);
+}
+
+.access-card__head p {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.access-close {
+  border: none;
+  background: var(--bg-soft);
+  color: var(--muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.access-close:hover {
+  color: var(--ink);
+}
+
+.access-form {
+  padding: 18px 24px 24px;
+}
+
+.access-field {
+  margin-bottom: 14px;
+}
+
+.access-label {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 7px;
+}
+
+.access-optional {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.access-input {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.access-input::placeholder {
+  color: var(--muted);
+}
+
+.access-input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(15, 107, 120, 0.12);
+}
+
+.access-input--area {
+  resize: vertical;
+  min-height: 66px;
+}
+
+.access-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.access-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.access-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.access-opt:hover {
+  border-color: var(--teal);
+}
+
+.access-opt input[type="radio"] {
+  accent-color: var(--teal);
+  margin-top: 3px;
+}
+
+.access-opt:has(input:checked) {
+  border-color: var(--teal);
+  background: var(--teal-light);
+}
+
+.access-opt__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.access-opt__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.access-opt__label b {
+  font-family: var(--font-head);
+  color: var(--teal-dark);
+  white-space: nowrap;
+}
+
+.access-opt__desc {
+  display: block;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.access-alert {
+  background: #fdecec;
+  color: #b3261e;
+  border: 1px solid #f5c2c0;
+  border-radius: var(--radius-sm);
+  padding: 10px 13px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.access-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.access-card--done {
+  border: none;
+  overflow: visible;
+}
+
+.access-done {
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.access-done__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  margin-bottom: 16px;
+}
+
+.access-done h3 {
+  font-family: var(--font-head);
+  font-size: 21px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.access-done p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 320px;
+  margin: 0 auto 20px;
+}
+
+@media (max-width: 520px) {
+  .access-row {
+    grid-template-columns: 1fr;
+  }
 }

@@ -18,7 +18,8 @@
     lock: '<svg class="lesson-lock" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
     award: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
     x: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-    info: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>'
+    info: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>',
+    bag: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'
   };
 
   const TITLES = {
@@ -27,6 +28,7 @@
     browse: "Browse Courses",
     grades: "Grades & Scores",
     certificates: "My Certificates",
+    access: "My Access",
     settings: "Account Settings",
     player: "Course Player"
   };
@@ -197,6 +199,25 @@
   function priceNum(p) {
     const n = parseInt(String(p).replace(/[^\d]/g, ""), 10);
     return isNaN(n) ? 0 : n;
+  }
+
+  function productFrom(course) {
+    const opts = (course && course.options) || [];
+    if (!opts.length) return course.price || "";
+    let min = null;
+    opts.forEach((o) => {
+      let p = Number(o && o.priceNum);
+      if (!(p > 0)) p = priceNum(o && o.price);
+      if (p > 0 && (min === null || p < min)) min = p;
+    });
+    if (min === null) return opts[0].price || course.price || "";
+    let best = opts[0];
+    opts.forEach((o) => {
+      let p = Number(o.priceNum);
+      if (!(p > 0)) p = priceNum(o.price);
+      if (p === min) best = o;
+    });
+    return best.price || String(min);
   }
 
   function fmtNaira(n) {
@@ -668,6 +689,12 @@
   const lessonsCache = {};
 
   function lessonCount(course) {
+    if (course && course.modules && course.modules.length) {
+      return course.modules.reduce(
+        (s, m) => s + (m.lessons || []).length + (m.examEnabled && m.exam && (m.exam.questions || []).length ? 1 : 0),
+        0
+      );
+    }
     const weeks = parseInt(String(course.duration), 10);
     const base = isNaN(weeks) ? 4 : weeks + 1;
     return Math.min(6, Math.max(4, base));
@@ -675,6 +702,9 @@
 
   function getLessons(course) {
     if (lessonsCache[course.id]) return lessonsCache[course.id];
+    if (course.modules && course.modules.length) {
+      return buildModuleLessons(course);
+    }
     const n = lessonCount(course);
     const rand = seeded(course.id * 131 + 7);
     const themes = [];
@@ -700,11 +730,69 @@
     return lessons;
   }
 
+  function examIntro(mod, course) {
+    return [
+      "This module exam checks what you have learned across \u201c" + (mod.title || "this module") + "\u201d.",
+      "Answer the questions below and score at least " + (Number(mod.exam.passMark) || 70) + "% to pass.",
+      "You can retake the exam as many times as you like \u2014 your best score is kept."
+    ];
+  }
+
+  function buildModuleLessons(course) {
+    const lessons = [];
+    let idx = 0;
+    (course.modules || []).forEach((mod) => {
+      (mod.lessons || []).forEach((l) => {
+        const lIdx = idx++;
+        lessons.push({
+          idx: lIdx,
+          title: l.title || "Lesson " + (lIdx + 1),
+          mins: l.mins || 15,
+          isExam: false,
+          module: mod,
+          video: l.video || { type: "none", url: "" },
+          paragraphs: l.content && l.content.length ? l.content.slice() : ["This lesson has no written content yet."],
+          passMark: 70
+        });
+      });
+      if (mod.examEnabled && mod.exam && (mod.exam.questions || []).length) {
+        const pm = Number(mod.exam.passMark) || 70;
+        lessons.push({
+          idx: idx++,
+          title: mod.exam.title || (mod.title || "Module") + " Exam",
+          mins: 20,
+          isExam: true,
+          module: mod,
+          video: { type: "none", url: "" },
+          paragraphs: examIntro(mod, course),
+          examPassMark: pm,
+          passMark: pm
+        });
+      }
+    });
+    lessonsCache[course.id] = lessons;
+    return lessons;
+  }
+
   const quizCache = {};
+
+  function passMarkFor(lesson) {
+    return (lesson && lesson.passMark) || 70;
+  }
 
   function getQuiz(course, lessonIdx) {
     const key = course.id * 100 + lessonIdx;
     if (quizCache[key]) return quizCache[key];
+    const lesson = getLessons(course)[lessonIdx];
+    if (lesson && lesson.isExam && lesson.module && lesson.module.exam && (lesson.module.exam.questions || []).length) {
+      const examQs = lesson.module.exam.questions.map((qo) => {
+        const opts = (qo.options || []).slice();
+        const ans = Math.min(Math.max(Number(qo.answer) || 0, 0), Math.max(0, opts.length - 1));
+        return { q: qo.q, options: opts, answer: ans, explain: qo.explain || "" };
+      });
+      quizCache[key] = examQs;
+      return examQs;
+    }
     const rand = seeded(course.id * 997 + lessonIdx * 37 + 11);
     const bank = QUESTION_BANK.slice();
     const picked = [];
@@ -802,6 +890,9 @@
     } else if (route.name === "grades") {
       setActiveNav("grades");
       renderGrades();
+    } else if (route.name === "access") {
+      setActiveNav("access");
+      renderAccess();
     } else if (route.name === "certificates") {
       setActiveNav("certificates");
       renderCertificates();
@@ -989,6 +1080,24 @@
     const grid = document.getElementById("browseGrid");
 
     function tileHTML(course) {
+      if (course.type === "product") {
+        const st = ETH.accessStatus(course.id);
+        const applied = st.applied;
+        return (
+          '<article class="course-tile">' +
+          '<div class="course-tile__thumb-wrap"><img src="' + course.image + '" alt="" class="course-tile__thumb"></div>' +
+          '<div class="course-tile__body">' +
+          '<h3 class="course-tile__title">' + esc(course.title) + "</h3>" +
+          '<div class="course-tile__meta"><span>' + ICONS.clock + " " + esc(course.duration) + "</span><span>" + esc(course.format || "Digital Product") + "</span></div>" +
+          '<p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + esc(course.desc) + "</p>" +
+          '<div class="course-tile__foot">' +
+          (applied
+            ? '<span class="badge badge--pass">Applied</span>'
+            : '<strong style="font-family:var(--font-head);color:var(--ink)">From ' + esc(productFrom(course)) + "</strong>") +
+          '<button class="btn ' + (applied ? "btn--teal" : "btn--primary") + ' btn-sm" data-get-access="' + course.id + '"' + (applied ? " disabled" : "") + ">" +
+          (applied ? "Applied" : "Get Access") + "</button></div></div></article>"
+        );
+      }
       const enrolledAlready = ETH.isEnrolled(user.id, course.id);
       const st = enrolledAlready ? courseState(course.id) : null;
       const inCart = !enrolledAlready && ETH.cart().indexOf(course.id) !== -1;
@@ -1027,6 +1136,38 @@
     apply();
   }
 
+  function renderAccess() {
+    const list = ETH.myAccess();
+    viewRoot.innerHTML =
+      '<div class="view">' +
+      '<div class="view-head"><h2>My Access</h2><p>Digital products you\u2019ve applied for \u2014 each recording the format you requested.</p></div>' +
+      (list.length
+        ? '<div class="stack" id="accessList">' +
+          list.map((app) => {
+            const course = getCourse(app.courseId);
+            return (
+              '<div class="access-item">' +
+              '<div class="access-item__icon">' + ICONS.bag.replace('width="14" height="14"', 'width="20" height="20"') + "</div>" +
+              "<div>" +
+              "<h3>" + esc(course ? course.title : app.courseTitle) + "</h3>" +
+              '<div class="course-tile__meta"><span>' +
+              esc(app.option && app.option.label) +
+              (app.option && app.option.price ? " \u00b7 " + esc(app.option.price) : "") +
+              "</span><span>" +
+              new Date(app.ts).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" }) +
+              "</span></div></div>" +
+              '<span class="badge badge--pass">Applied</span>' +
+              "</div>"
+            );
+          }).join("") +
+          "</div>"
+        : '<div class="empty-state"><span class="empty-state__icon">' + ICONS.bag + "</span>" +
+          "<h3>No digital products yet</h3>" +
+          "<p>When you apply for a digital product on the catalogue or browse page it appears here as \u201cApplied\u201d.</p>" +
+          '<button class="btn btn--primary" data-goto="#browse">Browse Catalogue</button></div>') +
+      "</div>";
+  }
+
   function renderGrades() {
     const rows = [];
     ETH.enrollments(user.id).forEach((cid) => {
@@ -1042,7 +1183,7 @@
           lesson,
           rec,
           best,
-          passed: best >= 70,
+          passed: best >= (rec.passMark || 70),
           ts: rec.ts || 0
         });
       });
@@ -1181,10 +1322,46 @@
 
   /* ---------------- course player ---------------- */
 
+  function youtubeID(url) {
+    const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function videoHTML(lesson) {
+    if (!lesson || lesson.isExam) return "";
+    const v = lesson.video || { type: "none", url: "" };
+    if (v.type === "url" && v.url) {
+      const yt = youtubeID(v.url);
+      if (yt) {
+        return (
+          '<div class="lesson-video-wrap">' +
+          '<iframe class="lesson-video" src="https://www.youtube.com/embed/' + yt + '" title="Lesson video" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>' +
+          "</div>"
+        );
+      }
+      return '<div class="lesson-video-wrap"><video class="lesson-video" src="' + esc(v.url) + '" controls preload="metadata"></video></div>';
+    }
+    if (v.type === "file" && v.src) {
+      return '<div class="lesson-video-wrap"><video class="lesson-video" src="' + esc(v.src) + '" controls preload="metadata"></video></div>';
+    }
+    return (
+      '<div class="lesson-video-empty">' +
+      ICONS.play +
+      "<span>Video coming soon</span>" +
+      (v.fileName ? "<p>Attached file: " + esc(v.fileName) + "</p>" : "<p>This lesson has no video yet \u2014 the written notes below are the lesson.</p>") +
+      "</div>"
+    );
+  }
+
   function renderPlayer(st, lessonParam) {
     let current = parseInt(lessonParam, 10);
     if (isNaN(current) || !st.lessons[current]) current = firstUnfinished(st);
     const lesson = st.lessons[current];
+    const modeLabel = lesson.isExam
+      ? "Module exam"
+      : lesson.video && lesson.video.type && lesson.video.type !== "none"
+        ? "Self-paced video + notes"
+        : "Self-paced notes";
 
     const itemsHTML = st.lessons.map((l) => {
       const rec = st.quizzes[l.idx];
@@ -1195,9 +1372,9 @@
         '<button class="' + cls + '" data-lesson-jump="' + l.idx + '"' + (unlocked ? "" : " disabled") + ">" +
         '<span class="lesson-num">' + (passed ? ICONS.check.replace('width="18" height="18"', 'width="14" height="14"') : l.idx + 1) + "</span>" +
         '<span class="lesson-info"><span class="lesson-name">' + esc(l.title) + "</span>" +
-        '<span class="lesson-sub">' + l.mins + " min · quiz required</span></span>" +
+        '<span class="lesson-sub">' + l.mins + " min \u00b7 " + (l.isExam ? "module exam" : "quiz required") + "</span></span>" +
         (rec
-          ? '<span class="lesson-score' + (rec.best < 70 ? " lesson-score--fail" : "") + '">' + rec.best + "%</span>"
+          ? '<span class="lesson-score' + (rec.best < passMarkFor(l) ? " lesson-score--fail" : "") + '">' + rec.best + "%</span>"
           : unlocked ? "" : ICONS.lock) +
         "</button>"
       );
@@ -1220,7 +1397,8 @@
 
       '<article class="panel lesson-body lesson-content">' +
       "<h2>" + esc(lesson.title) + "</h2>" +
-      '<div class="lesson-content__meta"><span>' + ICONS.clock + " " + lesson.mins + " minutes</span><span>" + ICONS.play + " Self-paced video + notes</span><span>" + ICONS.checkCircle + (passed ? " Completed · best " + (st.quizzes[current].best) + "%" : " Quiz pending") + "</span></div>" +
+      '<div class="lesson-content__meta"><span>' + ICONS.clock + " " + lesson.mins + " minutes</span><span>" + ICONS.play + " " + modeLabel + "</span><span>" + ICONS.checkCircle + (passed ? " Completed · best " + (st.quizzes[current].best) + "%" : " Quiz pending") + "</span></div>" +
+      videoHTML(lesson) +
       '<div class="lesson-prose">' + lesson.paragraphs.map((p) => "<p>" + esc(p) + "</p>").join("") + "</div>" +
       (locked
         ? '<div class="complete-banner">' + ICONS.lock + "<p>This class unlocks after you pass the previous class quiz.</p></div>"
@@ -1276,14 +1454,16 @@
 
   function renderQuizIntro(quiz) {
     const best = quiz.st.quizzes[quiz.lessonIdx];
+    const qty = quiz.questions.length;
+    const passMark = passMarkFor(quiz.lesson);
     document.getElementById("quizBody").innerHTML =
       '<div class="result-wrap">' +
       '<span class="cert-card__seal" style="margin-bottom:20px">' + ICONS.award + "</span>" +
       '<h2 style="margin-bottom:8px;font-size:24px">' + esc(quiz.lesson.title.split(":")[0]) + " Quiz</h2>" +
-      '<p class="result-sub">5 multiple-choice questions covering this class. Score at least <strong style="color:var(--ink)">70%</strong> to mark the class complete and unlock the next one.</p>' +
+      '<p class="result-sub">' + qty + " multiple-choice question" + (qty === 1 ? "" : "s") + " covering this " + (quiz.lesson.isExam ? "module." : "class.") + ' Score at least <strong style="color:var(--ink)">' + passMark + "%</strong> to mark it complete and unlock the next one.</p>" +
       '<div class="summary-chips" style="justify-content:center;margin-bottom:26px">' +
-      '<span class="chip-stat">Questions <strong>5</strong></span>' +
-      '<span class="chip-stat">Pass mark <strong>70%</strong></span>' +
+      '<span class="chip-stat">Questions <strong>' + qty + "</strong></span>" +
+      '<span class="chip-stat">Pass mark <strong>' + passMark + "%</strong></span>" +
       '<span class="chip-stat">Attempts so far <strong>' + (best ? best.attempts : 0) + "</strong></span>" +
       (best ? '<span class="chip-stat">Best score <strong>' + best.best + "%</strong></span>" : "") +
       "</div>" +
@@ -1349,7 +1529,8 @@
 
   function finishQuiz(quiz) {
     const pct = Math.round((quiz.correct / quiz.questions.length) * 100);
-    const passed = pct >= 70;
+    const passMark = passMarkFor(quiz.lesson);
+    const passed = pct >= passMark;
 
     let result = { best: pct, passed, justCompleted: false };
     if (passed) {
@@ -1360,7 +1541,8 @@
         pct,
         quiz.st.total,
         quiz.lesson.title,
-        quiz.st.course.title
+        quiz.st.course.title,
+        passMark
       );
     } else {
       ETH.recordFailedAttempt(user.id, quiz.st.course.id, quiz.lessonIdx);
@@ -1391,7 +1573,7 @@
       '<stop offset="100%" stop-color="' + (passed ? "#3a97a5" : "#f15a29") + '"/></linearGradient></defs>' +
       '<circle class="ring-bg" cx="79" cy="79" r="68"></circle>' +
       '<circle class="ring-val" cx="79" cy="79" r="68" id="ringVal"></circle></svg>' +
-      '<div class="ring-center"><div><strong id="ringPct">0%</strong><small>' + quiz.correct + " of 5 correct</small></div></div></div>" +
+      '<div class="ring-center"><div><strong id="ringPct">0%</strong><small>' + quiz.correct + " of " + quiz.questions.length + " correct</small></div></div></div>" +
       '<div><span class="result-verdict ' + (passed ? "result-verdict--pass" : "result-verdict--fail") + '">' +
       (passed ? ICONS.checkCircle + " Passed" : ICONS.info + " Below pass mark") + "</span></div>" +
       '<p class="result-sub" style="margin-top:14px">' +
@@ -1399,7 +1581,7 @@
         ? "Congratulations! You have finished every class in this course \u2014 your certificate has been unlocked."
         : passed
           ? "Class marked complete. Keep the momentum going!"
-          : "You need 70% to pass this class. Review the feedback above and try again \u2014 your best score is kept.") +
+          : "You need " + passMark + "% to pass this " + (quiz.lesson.isExam ? "module exam" : "class") + ". Review the feedback above and try again \u2014 your best score is kept.") +
       "</p>" +
       '<details style="text-align:left;margin-bottom:22px"><summary style="cursor:pointer;font-weight:600;font-family:var(--font-head);color:var(--blue);font-size:14px">Review answers</summary>' +
       '<div class="review-list" style="margin-top:12px">' + reviewHTML + "</div></details>" +
@@ -1464,27 +1646,43 @@
     const scores = st.lessons.map((l) => (st.quizzes[l.idx] || {}).best || 0);
     const finalScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 
+    let tpl = null;
+    if (ETH.readCertTemplate) {
+      try { tpl = ETH.readCertTemplate(courseId); } catch (e) {}
+    }
+
     const holder = document.createElement("div");
     holder.className = "cert-overlay";
     holder.id = "certOverlay";
+
+    const certInner = tpl && tpl.dataUrl
+      ? '<div class="certificate certificate--tpl" id="certPrint"><div class="cert-tpl-box">' +
+        (String(tpl.dataUrl).indexOf("data:application/pdf") === 0
+          ? '<iframe src="' + esc(tpl.dataUrl) + '" title="Certificate template"></iframe>'
+          : '<img src="' + esc(tpl.dataUrl) + '" alt="Certificate template">') +
+        "</div></div>"
+      : '<div class="certificate" id="certPrint">' +
+        '<div class="cert-logo-row"><img src="images/logo/Logo.jpeg" alt=""><span class="cert-org">EdTech Training Hub Ltd<small>Learn · Teach · Create · Thrive</small></span></div>' +
+        '<div class="cert-title">Certificate of Completion</div>' +
+        '<div class="cert-line"></div>' +
+        '<p class="cert-preamble">This is to certify that</p>' +
+        '<div class="cert-name">' + esc(user.fname + " " + user.lname) + "</div>" +
+        '<div class="cert-rule"></div>' +
+        '<p class="cert-preamble">has successfully completed all classes and assessments of the course</p>' +
+        '<div class="cert-course">' + esc(st.course.title) + "</div>" +
+        '<p class="cert-preamble">with a final average score of <strong>' + finalScore + "%</strong></p>" +
+        '<div class="cert-meta">' +
+        "<div><strong>" + ETH.fmtDate(st.completedAt) + "</strong>Date of Completion</div>" +
+        '<span class="cert-seal">\u2713</span>' +
+        "<div><strong>" + finalScore + "%</strong>Final Score</div>" +
+        "</div></div>";
+
     holder.innerHTML =
-      '<div class="certificate" id="certPrint">' +
-      '<div class="cert-logo-row"><img src="images/logo/Logo.jpeg" alt=""><span class="cert-org">EdTech Training Hub Ltd<small>Learn · Teach · Create · Thrive</small></span></div>' +
-      '<div class="cert-title">Certificate of Completion</div>' +
-      '<div class="cert-line"></div>' +
-      '<p class="cert-preamble">This is to certify that</p>' +
-      '<div class="cert-name">' + esc(user.fname + " " + user.lname) + "</div>" +
-      '<div class="cert-rule"></div>' +
-      '<p class="cert-preamble">has successfully completed all classes and assessments of the course</p>' +
-      '<div class="cert-course">' + esc(st.course.title) + "</div>" +
-      '<p class="cert-preamble">with a final average score of <strong>' + finalScore + "%</strong></p>" +
-      '<div class="cert-meta">' +
-      "<div><strong>" + ETH.fmtDate(st.completedAt) + "</strong>Date of Completion</div>" +
-      '<span class="cert-seal">\u2713</span>' +
-      "<div><strong>" + finalScore + "%</strong>Final Score</div>" +
-      "</div></div>" +
+      certInner +
       '<div class="cert-toolbar">' +
-      '<button class="btn btn--primary btn-sm" onclick="window.print()">Download / Print</button>' +
+      (tpl && tpl.dataUrl
+        ? '<a class="btn btn--primary btn-sm" href="' + esc(tpl.dataUrl) + '" download="' + esc(tpl.fileName || "certificate") + '">Download Certificate</a>'
+        : '<button class="btn btn--primary btn-sm" onclick="window.print()">Download / Print</button>') +
       '<button class="btn btn--outline-light btn-sm" id="certClose">Close</button></div>';
 
     document.body.appendChild(holder);
@@ -1572,6 +1770,14 @@
         paintCartBadge();
         openCheckout([cid], false);
       }
+      return;
+    }
+
+    const accessBtn = e.target.closest("[data-get-access]");
+    if (accessBtn) {
+      if (accessBtn.disabled) return;
+      const course = getCourse(Number(accessBtn.getAttribute("data-get-access")));
+      if (course) ETH.showAccessModal(course);
       return;
     }
 

@@ -7,7 +7,11 @@
     enroll: "eth_enroll",
     progress: "eth_progress",
     resets: "eth_resets",
-    activity: "eth_activity"
+    activity: "eth_activity",
+    catalog: "eth_catalog",
+    catalogSeq: "eth_catalog_seq",
+    certTemplates: "eth_cert_templates",
+    applications: "eth_applications"
   };
 
   function read(key, fallback) {
@@ -276,6 +280,218 @@
     localStorage.removeItem("eth_cart");
   }
 
+  /* ---------------- digital product access applications ---------------- */
+
+  function readApplications() {
+    return read(KEYS.applications, []);
+  }
+
+  function saveApplications(list) {
+    write(KEYS.applications, list);
+  }
+
+  function lastApplied(courseId, user) {
+    var list = readApplications();
+    var match = null;
+    for (var i = 0; i < list.length; i++) {
+      var app = list[i];
+      if (Number(app.courseId) !== Number(courseId)) continue;
+      var isMine = user ? (app.userId === user.id || (app.userId == null && String(app.email).toLowerCase() === String(user.email).toLowerCase())) : true;
+      if (!isMine) continue;
+      if (!match || app.ts > match.ts) match = app;
+    }
+    return match;
+  }
+
+  function accessApply(data) {
+    if (!String(data.courseId).length || !data.option || !String(data.option.label).trim()) {
+      return { ok: false, error: "Please choose a format." };
+    }
+    if (!String(data.name || "").trim()) {
+      return { ok: false, error: "Please enter your full name." };
+    }
+    if (!validEmail(data.email)) {
+      return { ok: false, error: "Please enter a valid email address." };
+    }
+    if (!String(data.phone || "").trim()) {
+      return { ok: false, error: "Please enter your phone number." };
+    }
+    var user = currentUser();
+    var app = {
+      id: "app_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      courseId: Number(data.courseId),
+      courseTitle: String(data.courseTitle || ""),
+      option: {
+        label: String(data.option.label).trim(),
+        price: String(data.option.price || ""),
+        desc: String(data.option.desc || "")
+      },
+      name: String(data.name).trim(),
+      email: String(data.email).trim(),
+      phone: String(data.phone).trim(),
+      note: String(data.note || "").trim(),
+      userId: user ? user.id : null,
+      status: "applied",
+      ts: Date.now()
+    };
+    var list = readApplications();
+    list.push(app);
+    saveApplications(list);
+    return { ok: true, app: app };
+  }
+
+  function myAccess() {
+    var user = currentUser();
+    var list = readApplications();
+    var seen = {};
+    var out = [];
+    for (var i = list.length - 1; i >= 0; i--) {
+      var app = list[i];
+      var isMine = user
+        ? (app.userId === user.id || (app.userId == null && String(app.email).toLowerCase() === String(user.email).toLowerCase()))
+        : false;
+      if (!isMine) continue;
+      var key = app.courseId;
+      if (seen[key]) continue;
+      seen[key] = true;
+      out.push(app);
+    }
+    return out;
+  }
+
+  function accessStatus(courseId) {
+    var user = currentUser();
+    var app = lastApplied(courseId, user);
+    return app ? { applied: true, app: app } : { applied: false, app: null };
+  }
+
+  function refreshGetAccessButtons(courseId) {
+    if (!document || !document.querySelectorAll) return;
+    var sel = "[data-get-access]";
+    document.querySelectorAll(sel).forEach(function (btn) {
+      var id = Number(btn.getAttribute("data-get-access"));
+      if (courseId != null && id !== Number(courseId)) return;
+      var st = accessStatus(id);
+      var applied = st.applied;
+      btn.classList.toggle("is-applied", applied);
+      btn.textContent = applied ? "Applied" : "Get Access";
+      btn.disabled = applied;
+    });
+  }
+
+  function showAccessModal(course, opts) {
+    if (!course || typeof document === "undefined" || !document.createElement) return null;
+    opts = opts || {};
+    var current = currentUser();
+    var existing = document.getElementById("accessOverlay");
+    if (existing) existing.remove();
+
+    var overlay = document.createElement("div");
+    overlay.className = "access-overlay";
+    overlay.id = "accessOverlay";
+
+    var optionsHTML = (course.options || []).map(function (o, i) {
+      return (
+        '<label class="access-opt">' +
+        '<input type="radio" name="access-opt" value="' + i + '"' + (i === 0 ? " checked" : "") + ">" +
+        '<span class="access-opt__body"><span class="access-opt__label">' + escAttr(o.label) +
+        '<b>' + escAttr(o.price || "") + "</b></span>" +
+        (o.desc ? '<span class="access-opt__desc">' + escAttr(o.desc) + "</span>" : "") +
+        "</span></label>"
+      );
+    }).join("");
+
+    overlay.innerHTML =
+      '<div class="access-card" role="dialog" aria-modal="true">' +
+      '<div class="access-card__head">' +
+      "<div><h3>Get Access</h3><p>" + escAttr(course.title) + "</p></div>" +
+      '<button class="access-close" type="button" aria-label="Close">&times;</button></div>' +
+      '<form class="access-form" novalidate>' +
+      '<div class="access-field"><label class="access-label">Choose a format</label>' +
+      '<div class="access-opts">' + optionsHTML + "</div></div>" +
+      '<div class="access-field"><label class="access-label">Full name *</label>' +
+      '<input class="access-input" type="text" name="name" value="' + escAttr(current ? ((current.fname || "") + " " + (current.lname || "")).trim() : "") + '" placeholder="Your full name"></div>' +
+      '<div class="access-row">' +
+      '<div class="access-field"><label class="access-label">Email *</label>' +
+      '<input class="access-input" type="email" name="email" value="' + escAttr(current ? current.email : "") + '" placeholder="you@example.com"></div>' +
+      '<div class="access-field"><label class="access-label">Phone *</label>' +
+      '<input class="access-input" type="tel" name="phone" value="' + escAttr(current ? current.phone : "") + '" placeholder="e.g. 08012345678"></div>' +
+      "</div>" +
+      '<div class="access-field"><label class="access-label">How will you use it? <span class="access-optional">(optional)</span></label>' +
+      '<textarea class="access-input access-input--area" name="note" rows="3" placeholder="A short note so we can prepare your access\u2026"></textarea></div>' +
+      '<div class="access-card__foot">' +
+      '<button type="button" class="btn access-cancel">Cancel</button>' +
+      '<button type="submit" class="btn btn--primary access-submit">Get Access</button>' +
+      "</div></form></div>";
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+
+    function close() {
+      overlay.remove();
+      document.body.style.overflow = "";
+    }
+
+    overlay.addEventListener("mousedown", function (e) {
+      if (e.target === overlay) close();
+    });
+    overlay.querySelector(".access-close").addEventListener("click", close);
+    overlay.querySelector(".access-cancel").addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+    if (opts.focusFirst) {
+      var first = overlay.querySelector("input[name=name]");
+      if (first && !first.value) first.focus();
+    }
+
+    overlay.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var form = e.target;
+      var sel = form.querySelector("input[name=access-opt]:checked");
+      var opt = course.options[Number(sel ? sel.value : 0)];
+      var res = accessApply({
+        courseId: course.id,
+        courseTitle: course.title,
+        option: opt,
+        name: form.querySelector("input[name=name]").value,
+        email: form.querySelector("input[name=email]").value,
+        phone: form.querySelector("input[name=phone]").value,
+        note: form.querySelector("textarea[name=note]").value
+      });
+      if (!res.ok) {
+        var alert = overlay.querySelector(".access-alert");
+        if (!alert) {
+          alert = document.createElement("div");
+          alert.className = "access-alert";
+          form.insertBefore(alert, form.firstChild);
+        }
+        alert.textContent = res.error;
+        return;
+      }
+      overlay.innerHTML =
+        '<div class="access-card access-card--done" role="dialog" aria-modal="true">' +
+        '<div class="access-done">' +
+        '<span class="access-done__icon">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+        "<h3>Application received!</h3>" +
+        "<p>Thanks, " + escAttr(res.app.name.split(" ")[0]) + ". Your request for <b>" + escAttr(course.title) + "</b> (" + escAttr(res.app.option.label) + ") has been noted. We\u2019ll confirm your access by email shortly.</p>" +
+        '<button type="button" class="btn btn--primary access-done-close">Done</button>' +
+        "</div></div>";
+      overlay.querySelector(".access-done-close").addEventListener("click", close);
+      refreshGetAccessButtons(course.id);
+    });
+
+    if (course.id != null) refreshGetAccessButtons(null);
+    return overlay;
+  }
+
+  function escAttr(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   function allProgress() {
     return read(KEYS.progress, {});
   }
@@ -299,16 +515,18 @@
     return courseProgress(userId, courseId).done.indexOf(lessonIdx) !== -1;
   }
 
-  function passQuiz(userId, courseId, lessonIdx, score, totalLessons, lessonTitle, courseTitle) {
+  function passQuiz(userId, courseId, lessonIdx, score, totalLessons, lessonTitle, courseTitle, passMark) {
+    passMark = passMark === undefined ? 70 : Number(passMark);
     var prog = courseProgress(userId, courseId);
     var prev = prog.quizzes[lessonIdx] || { best: 0, attempts: 0 };
     prog.quizzes[lessonIdx] = {
       best: Math.max(prev.best, score),
       last: score,
       attempts: prev.attempts + 1,
+      passMark: passMark,
       ts: Date.now()
     };
-    if (score >= 70 && prog.done.indexOf(lessonIdx) === -1) {
+    if (score >= passMark && prog.done.indexOf(lessonIdx) === -1) {
       prog.done.push(lessonIdx);
     }
     prog.done.sort(function (a, b) { return a - b; });
@@ -322,10 +540,10 @@
 
     if (justCompleted) {
       logActivity(userId, "Completed \u201c" + courseTitle + "\u201d \u2014 certificate unlocked!");
-    } else if (score >= 70) {
+    } else if (score >= passMark) {
       logActivity(userId, "Passed quiz \u201c" + lessonTitle + "\u201d with " + score + "%");
     }
-    return { best: prog.quizzes[lessonIdx].best, passed: score >= 70, justCompleted: justCompleted };
+    return { best: prog.quizzes[lessonIdx].best, passed: score >= passMark, justCompleted: justCompleted };
   }
 
   function recordFailedAttempt(userId, courseId, lessonIdx) {
@@ -385,6 +603,24 @@
     var d = new Date(ts);
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  }
+
+  function readCatalog() {
+    return read(KEYS.catalog, []);
+  }
+
+  function getCatalogCourse(id) {
+    var list = readCatalog();
+    id = Number(id);
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === id) return list[i];
+    }
+    return null;
+  }
+
+  function readCertTemplate(courseId) {
+    var t = read(KEYS.certTemplates, {});
+    return t[Number(courseId)] || null;
   }
 
   var eyeOpenSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -655,6 +891,11 @@
     cartAdd: cartAdd,
     cartRemove: cartRemove,
     cartClear: cartClear,
+    accessApply: accessApply,
+    myAccess: myAccess,
+    accessStatus: accessStatus,
+    showAccessModal: showAccessModal,
+    refreshGetAccessButtons: refreshGetAccessButtons,
     courseProgress: courseProgress,
     isLessonPassed: isLessonPassed,
     passQuiz: passQuiz,
@@ -663,6 +904,9 @@
     avgBestScore: avgBestScore,
     getActivity: getActivity,
     logActivity: logActivity,
+    readCatalog: readCatalog,
+    getCatalogCourse: getCatalogCourse,
+    readCertTemplate: readCertTemplate,
     initials: initials,
     fmtDate: fmtDate,
     showAlert: showAlert,

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – EdTech Training Hub</title>
+  <link rel="icon" type="image/png" href="../images/logo/Logo.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-theme="light">
+
+  <div class="al-shell">
+    <div class="al-card">
+      <div class="al-logo">
+        <img src="../images/logo/Logo.jpeg" alt="EdTech Training Hub logo">
+        <div>
+          <h1>EdTech Training Hub</h1>
+          <p>LMS Management Console</p>
+        </div>
+      </div>
+
+      <h2 class="al-title">Admin Login</h2>
+      <p class="al-sub">Sign in to manage courses, modules, exams, certificates and students.</p>
+
+      <div class="al-cred">
+        <span><strong>Development credentials</strong></span>
+        <span>Username: <code>Edutech Admin</code></span>
+        <span>Password: <code>1234Asdf!!!</code></span>
+      </div>
+
+      <div class="a-alert a-alert--error" id="loginAlert" style="display:none"></div>
+
+      <form class="a-form" id="adminLoginForm" novalidate>
+        <div class="a-field">
+          <label class="a-label" for="admUser">Username</label>
+          <input class="a-input" type="text" id="admUser" autocomplete="username" placeholder="Edutech Admin">
+        </div>
+        <div class="a-field">
+          <label class="a-label" for="admPass">Password</label>
+          <input class="a-input" type="password" id="admPass" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <button type="submit" class="a-btn a-btn--primary a-btn--lg a-btn--block">Sign In to Admin Panel</button>
+      </form>
+
+      <div class="al-dev">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+        <span>Development mode: username and password changes are disabled and will take effect in production after handover.</span>
+      </div>
+
+      <a class="al-back" href="../index.html">&larr; Back to website</a>
+    </div>
+  </div>
+
+  <div class="a-toast-root" id="toastRoot"></div>
+
+  <script src="../js/auth.js"></script>
+  <script src="js/admin-store.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var S = window.ETH_ADMIN;
+      var toastRoot = document.getElementById("toastRoot");
+      var alertBox = document.getElementById("loginAlert");
+
+      window.ETH_ADMIN_LOGIN = {
+        init: function () {
+          document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var btn = this.querySelector("button[type=submit]");
+            btn.disabled = true;
+            btn.textContent = "Signing in\u2026";
+            setTimeout(function () {
+              var res = S.adminLogin(
+                document.getElementById("admUser").value,
+                document.getElementById("admPass").value
+              );
+              if (!res.ok) {
+                btn.disabled = false;
+                btn.textContent = "Sign In to Admin Panel";
+                alertBox.style.display = "flex";
+                alertBox.innerHTML =
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>' +
+                  "<span>" + esc(res.error) + "</span>";
+                return;
+              }
+              window.location.href = "index.html";
+            }, 350);
+          });
+        }
+      };
+
+      function esc(str) {
+        return String(str == null ? "" : str)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      }
+
+      window.ETH_ADMIN_LOGIN.init();
+    })();
+  </script>
+</body>
+</html>
