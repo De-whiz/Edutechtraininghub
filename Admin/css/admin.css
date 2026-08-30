@@ -93,16 +93,18 @@ a { color: var(--a-blue); text-decoration: none; }
 
 .al-logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 12px;
   margin-bottom: 22px;
 }
 
 .al-logo img {
-  width: 46px;
-  height: 46px;
-  object-fit: cover;
-  border-radius: 12px;
+  width: 210px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0;
 }
 
 .al-logo h1 { font-size: 19px; margin: 0 0 2px; }
@@ -168,20 +170,22 @@ a { color: var(--a-blue); text-decoration: none; }
 
 .a-brand {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 8px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 8px 8px 18px;
   border-bottom: 1px solid var(--a-brd);
   margin-bottom: 14px;
 }
 
 .a-brand img {
-  width: 38px; height: 38px;
-  object-fit: cover;
-  border-radius: 10px;
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0;
 }
 
-.a-brand b { font-family: var(--a-font-head); font-size: 14.5px; display: block; line-height: 1.15; }
+.a-brand b { font-family: var(--a-font-head); font-size: 13.5px; display: block; line-height: 1.15; }
 .a-brand span { font-size: 11px; color: var(--a-muted); }
 
 .a-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
@@ -873,7 +877,8 @@ textarea.a-input { resize: vertical; min-height: 80px; line-height: 1.55; }
 
 @media (max-width: 900px) {
   .a-side { position: static; width: 100%; height: auto; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 10px; border-right: none; border-bottom: 1px solid var(--a-brd); }
-  .a-brand { border-bottom: none; padding: 0; margin: 0; }
+  .a-brand { border-bottom: none; padding: 0; margin: 0; flex-direction: row; align-items: center; gap: 8px; }
+  .a-brand img { width: 120px; }
   .a-nav { flex-direction: row; overflow-x: auto; flex: none; width: 100%; order: 3; padding-bottom: 4px; }
   .a-nav a { white-space: nowrap; }
   .a-side__foot { display: none; }
