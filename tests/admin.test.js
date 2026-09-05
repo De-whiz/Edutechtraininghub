@@ -57,14 +57,9 @@ t("dev change locked", cred.ok === false && cred.dev === true && /In development
 t("account unchanged in dev", A.getAccount().username === A.DEFAULT_USERNAME);
 
 t("courses start empty", A.listCatalog().length === 0);
-const demo = A.seedDemoCourse();
-t("demo course seeded", demo.ok === true);
-t("demo id >= 100", demo.course.id >= 100);
-t("demo module-aware lesson total", A.courseLessonTotal(demo.course.id) === 5);
-t("demo summary counts", A.summaryOf(demo.course).lessons === 3 && A.summaryOf(demo.course).exams === 2);
 
 const blank = A.blankCourse();
-t("next ids increment >= 100", blank.id >= 100 && blank.id > demo.course.id);
+t("next ids >= 100", blank.id >= 100);
 
 res = A.saveCourse({ id: 5, title: "Too Low" });
 t("id below 100 rejected", res.ok === false && /Invalid course id/.test(res.error));

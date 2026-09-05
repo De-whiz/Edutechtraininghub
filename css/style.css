@@ -3869,3 +3869,7 @@ textarea.form-control {
     grid-template-columns: 1fr;
   }
 }
+
+.catalog-empty{grid-column:1/-1;text-align:center;padding:46px 20px;color:var(--muted);overflow:hidden}
+.catalog-empty strong{display:block;font-family:var(--font-head);font-size:1.15rem;color:var(--ink);margin-bottom:8px}
+.catalog-empty p{margin:0;font-size:0.95rem}

@@ -555,59 +555,6 @@
     return { ok: true, count: written };
   }
 
-  function seedDemoCourse() {
-    var demo = blankCourse();
-    demo.title = "Orientation to Your Learning Journey";
-    demo.tagline = "A sample course to explore the admin panel.";
-    demo.desc = "A hands-on demo course that shows how modules, lessons, videos and module exams work together in the LMS. Use it to test the student experience end to end.";
-    demo.image = "images/hero.jpg";
-    demo.price = "\u20a60";
-    demo.priceNum = 0;
-    demo.duration = "1 week";
-    demo.level = "Beginner";
-    demo.format = "Self-Paced";
-    demo.cat = "digital-skills teaching";
-    demo.featured = true;
-    demo.modules = [
-      {
-        id: "dm1",
-        title: "Module 1: The Basics",
-        lessons: [
-          { id: "dl1", title: "Welcome & How to Learn Online", mins: 10, video: { type: "none", url: "" }, content: ["Welcome! This short lesson sets the tone for the course.", "You will learn how modules, lessons and exams are structured."] },
-          { id: "dl2", title: "Setting Your Goals", mins: 8, video: { type: "url", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", fileName: "" }, content: ["Clear goals improve completion.", "Write down one outcome you want from this course."] }
-        ],
-        examEnabled: true,
-        exam: {
-          title: "Module 1 Exam",
-          passMark: 70,
-          questions: [
-            { q: "What is the pass mark used in this course?", options: ["50%", "60%", "70%", "80%"], answer: 2, explain: "The default pass mark is 70%." },
-            { q: "When do you take a module exam?", options: ["Before starting the module", "After finishing all lessons in the module", "Only at the very end of the course", "Exams are optional"], answer: 1, explain: "Each module ends with an exam after its lessons." }
-          ]
-        }
-      },
-      {
-        id: "dm2",
-        title: "Module 2: Next Steps",
-        lessons: [
-          { id: "dl3", title: "Putting It Into Practice", mins: 12, video: { type: "none", url: "" }, content: ["Apply what you learn in small, concrete steps."] }
-        ],
-        examEnabled: true,
-        exam: {
-          title: "Module 2 Exam",
-          passMark: 70,
-          questions: [
-            { q: "What does a certificate unlock?", options: ["Nothing", "A bonus lesson", "Completion of a course", "Access to the admin panel"], answer: 2, explain: "Completing the course unlocks your certificate." }
-          ]
-        }
-      }
-    ];
-    demo.published = true;
-    var res = saveCourse(demo);
-    if (res.ok) logAction("Seeded demo course \u201c" + demo.title + "\u201d");
-    return res;
-  }
-
   function clearAdminData() {
     try {
       localStorage.removeItem(KEYS.session);
@@ -696,7 +643,6 @@
     logAction: logAction,
     exportAll: exportAll,
     importAll: importAll,
-    seedDemoCourse: seedDemoCourse,
     clearAdminData: clearAdminData,
     wipeAll: wipeAll,
     summaryOf: summaryOf

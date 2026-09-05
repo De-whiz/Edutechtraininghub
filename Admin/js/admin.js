@@ -298,7 +298,6 @@
       '<div class="a-card a-card--wide"><div class="a-card__head"><h3>Quick actions</h3></div>' +
       '<div class="a-card__body"><div class="a-toolbar" style="margin:0">' +
       '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " Create Course</button>" +
-      '<button class="a-btn a-btn--teal" data-act="course-seed">' + ICONS.upload + " Seed Demo Course</button>" +
       '<button class="a-btn a-btn--outline" data-act="goto-students">' + ICONS.users + " Manage Students</button>" +
       '<button class="a-btn a-btn--outline" data-act="goto-certificates">' + ICONS.award + " Certificates</button>" +
       "</div></div></div>" +
@@ -342,7 +341,6 @@
       '<div class="a-view__head"><div><h2 class="a-view__title">Courses & Modules</h2>' +
       '<p class="a-view__sub">Create courses, build modules, attach lessons &amp; videos, and add an exam after each module.</p></div>' +
       '<div class="a-toolbar" style="margin:0">' +
-      '<button class="a-btn a-btn--outline" data-act="course-seed">' + ICONS.upload + " Seed Demo</button>" +
       '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " New Course</button>" +
       "</div></div>" +
 
@@ -352,13 +350,12 @@
           "<th>Course</th><th>Structure</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead>" +
           "<tbody id=\"courseRows\">" + rows + "</tbody></table></div>"
         : '<div class="a-empty">' + ICONS.book +
-          "<h4>No admin courses yet</h4><p>Create your first course, or seed the demo course to explore modules, exams and certificates.</p>" +
+          "<h4>No courses yet</h4><p>Create and publish your first course \u2014 it will appear on the public pages and in student dashboards.</p>" +
           '<div class="a-toolbar" style="justify-content:center">' +
-          '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " Create Course</button>" +
-          '<button class="a-btn a-btn--teal" data-act="course-seed">' + ICONS.upload + " Seed Demo Course</button></div></div>") +
+          '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " Create Course</button></div></div>") +
 
       '<div class="a-alert a-alert--info" style="margin-top:18px">' + ICONS.info +
-      "<span>The 13 default site courses are fixed marketing content (managed separately). Admin courses here appear live in the student dashboard and on the public pages.</span></div>";
+      "<span>Only courses you create and publish here appear on the public pages, in the course catalog and in student dashboards.</span></div>";
   }
 
   /* ---------------- course editor ---------------- */
@@ -566,7 +563,7 @@
       "<span>Uploads are capped at <b>10 MB per file</b> in test mode. Files over that size are rejected with a friendly message.</span></div>" +
 
       '<div class="a-field"><label class="a-label">Course title <span class="req">*</span></label>' +
-      '<input class="a-input" data-path="title" value="' + esc(draft.title || "") + '" placeholder="e.g. Digital Skills for Teachers"></div>' +
+      '<input class="a-input" data-path="title" value="' + esc(draft.title || "") + '" placeholder="e.g. Financial Literacy Basics"></div>' +
 
       '<div class="a-form-row" style="margin-top:14px">' +
       '<div class="a-field"><label class="a-label">Tagline</label>' +
@@ -662,7 +659,7 @@
       '<a href="#courses" class="a-btn a-btn--ghost a-btn--sm">&larr; Back</a></div>' +
       '<div class="a-card__body">' +
       '<div class="a-field"><label class="a-label">Product title <span class="req">*</span></label>' +
-      '<input class="a-input" data-path="title" value="' + esc(draft.title || "") + '" placeholder="e.g. Digital Product Creation"></div>' +
+      '<input class="a-input" data-path="title" value="' + esc(draft.title || "") + '" placeholder="e.g. Wedding Photography Kit"></div>' +
 
       '<div class="a-form-row" style="margin-top:14px">' +
       '<div class="a-field"><label class="a-label">Tagline</label>' +
@@ -923,7 +920,6 @@
       '<label class="a-btn a-btn--outline" style="cursor:pointer">' + ICONS.upload + " Import Backup" +
       '<input type="file" accept="application/json,.json" style="display:none" id="importFile"></label></div>' +
       '<div class="a-toolbar" style="margin:0;flex-wrap:wrap">' +
-      '<button class="a-btn a-btn--teal" data-act="course-seed">' + ICONS.upload + " Seed Demo Course</button>" +
       '<button class="a-btn a-btn--outline" data-act="settings-clear-admin">' + ICONS.trash + " Clear Admin Data</button>" +
       '<button class="a-btn a-btn--danger" data-act="settings-wipe">' + ICONS.alert + " Reset Entire LMS</button></div>" +
       "</div></div>" +
@@ -1073,11 +1069,6 @@
         break;
       case "course-edit":
         navigate("#course/" + el.getAttribute("data-id"));
-        break;
-      case "course-seed":
-        var seed = S.seedDemoCourse();
-        if (!seed.ok) toast(seed.error, true);
-        else { toast("Demo course seeded \u2014 explore it in the student dashboard."); render(); }
         break;
       case "course-duplicate":
         var dup = S.duplicateCourse(el.getAttribute("data-id"));

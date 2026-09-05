@@ -1,309 +1,7 @@
 (function () {
   "use strict";
 
-  var COURSES = [
-    {
-      id: 1,
-      title: "Digital Skills & Online Teaching Masterclass",
-      tagline: "Learn. Create. Teach. Thrive.",
-      desc: "A practical programme designed to take participants from basic digital confidence to online teaching, curriculum and course design, digital content creation and professional positioning. Participants learn how to use essential digital and AI tools, teach effectively online, design a curriculum or course, create digital learning resources and develop a professional portfolio and knowledge-based offer.",
-      image: "images/courses/masterclass.jpg",
-      price: "\u20a630,000",
-      priceNum: 30000,
-      duration: "5 weeks",
-      level: "All Levels",
-      format: "Self-Paced + Live Coaching",
-      featured: true,
-      cat: "digital-skills teaching",
-      specs: [
-        { label: "5 Weeks", sub: "Duration" },
-        { label: "Self-Paced Lessons", sub: "Learn at your own pace" },
-        { label: "Weekly Live Coaching", sub: "Live Q&A every week" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Project-Based", sub: "Hands-on practical work" },
-        { label: "Portfolio", sub: "Build evidence of your skills" }
-      ],
-      outcomes: ["Essential digital skills", "Basic AI skills", "An online teaching sample", "A curriculum / course / training outline", "A digital learning resource or product", "A professional portfolio", "A knowledge-based offer", "A simple launch plan"],
-      audience: ["Teachers and educators ready to teach online", "Online tutors building sustainable opportunities", "Trainers and facilitators delivering workshops", "Coaches and consultants packaging their knowledge", "Knowledge professionals and subject-matter experts", "Entrepreneurs and creators building digital products", "Anyone with knowledge or skills they want to teach or share online"],
-      formatDetails: ["Self-paced lessons you can study around your schedule", "Weekly live coaching & Q&A with experienced facilitators", "Practical projects you complete as you learn", "Certificate of completion when you finish", "Designed for every level \u2014 from beginners to experienced professionals"]
-    },
-    {
-      id: 2,
-      title: "Instructional Design Fundamentals",
-      tagline: "Structure learning that works.",
-      desc: "Learn how to structure engaging learning experiences from the ground up using proven instructional design principles and frameworks. Covers learning objectives, storyboarding, course structure and assessment design.",
-      image: "images/courses/instructional-design.jpg",
-      price: "\u20a625,000",
-      priceNum: 25000,
-      duration: "4 weeks",
-      level: "Beginner",
-      format: "Self-Paced",
-      featured: false,
-      cat: "design teaching",
-      specs: [
-        { label: "4 Weeks", sub: "Duration" },
-        { label: "Self-Paced", sub: "Study on your schedule" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Project-Based", sub: "Hands-on assignments" }
-      ],
-      outcomes: ["Instructional design fundamentals", "Learning objective writing", "Storyboarding basics", "Course structure skills", "Assessment design"],
-      audience: ["Educators building their first online courses", "Trainers moving from in-person to digital", "Content creators structuring learning material", "HR and L&D professionals"],
-      formatDetails: ["Self-paced lessons you can study around your schedule", "Practical assignments you complete as you learn", "Certificate of completion when you finish", "Designed for beginners with no prior experience"]
-    },
-    {
-      id: 3,
-      title: "AI for Educators",
-      tagline: "Teach smarter with AI.",
-      desc: "Use AI tools meaningfully to save time and create better learning materials. Understand when, why and how to integrate AI into your teaching practice with confidence.",
-      image: "images/courses/ai-for-educators.jpg",
-      price: "\u20a620,000",
-      priceNum: 20000,
-      duration: "3 weeks",
-      level: "Beginner",
-      format: "Self-Paced",
-      featured: false,
-      cat: "ai-tech teaching",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced", sub: "Study on your schedule" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Hands-On", sub: "Real AI tool practice" }
-      ],
-      outcomes: ["AI tool fluency", "AI-assisted content creation", "Prompt engineering basics", "Workflow automation", "Ethical AI use in education"],
-      audience: ["Teachers looking to integrate AI into the classroom", "Trainers wanting to speed up content creation", "Educators curious about AI but unsure where to start", "Instructional designers exploring AI-assisted workflows"],
-      formatDetails: ["Self-paced lessons you can study around your schedule", "Hands-on exercises with real AI tools", "Practical projects you complete as you learn", "Certificate of completion when you finish", "No prior AI experience needed"]
-    },
-    {
-      id: 4,
-      title: "LMS for Course Creators",
-      tagline: "Launch your own learning platform.",
-      desc: "Set up, organise and deliver your own online courses with a Learning Management System from scratch. Learn platform selection, course setup and learner management.",
-      image: "images/courses/lms-course-creators.jpg",
-      price: "\u20a622,000",
-      priceNum: 22000,
-      duration: "3 weeks",
-      level: "Intermediate",
-      format: "Self-Paced + Live Q&A",
-      featured: false,
-      cat: "ai-tech digital-skills",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Live Q&A", sub: "Flexible with support" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Hands-On", sub: "Set up your own LMS" }
-      ],
-      outcomes: ["LMS platform selection", "Course setup and configuration", "Content organisation", "Learner management", "Reporting and analytics"],
-      audience: ["Educators creating their first online course", "Training organisations going digital", "Entrepreneurs packaging knowledge into courses", "Instructional designers needing platform skills"],
-      formatDetails: ["Self-paced lessons with weekly live Q&A sessions", "Hands-on LMS setup projects", "Practical exercises you complete as you learn", "Certificate of completion when you finish", "Some teaching experience recommended"]
-    },
-    {
-      id: 5,
-      title: "Digital Skills for Teachers",
-      tagline: "Teach effectively in the digital age.",
-      desc: "Build practical digital skills that help you teach more effectively in modern classrooms and online environments. Covers digital productivity, collaboration and content creation.",
-      image: "images/courses/digital-skills-teachers.jpg",
-      price: "\u20a618,000",
-      priceNum: 18000,
-      duration: "3 weeks",
-      level: "All Levels",
-      format: "Self-Paced",
-      featured: false,
-      cat: "digital-skills teaching",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced", sub: "Study on your schedule" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Practical", sub: "Real classroom applications" }
-      ],
-      outcomes: ["Digital productivity tools", "Online collaboration", "Digital content creation", "Virtual classroom management", "Digital assessment basics"],
-      audience: ["Classroom teachers building digital confidence", "School administrators going paperless", "Tutors moving to online delivery", "Teacher trainers updating their toolkit"],
-      formatDetails: ["Self-paced lessons you can study around your schedule", "Practical exercises for real classroom use", "Projects you complete as you learn", "Certificate of completion when you finish", "Designed for every level"]
-    },
-    {
-      id: 6,
-      title: "eLearning Content Development",
-      tagline: "Create content learners love.",
-      desc: "Create engaging digital learning content including interactive modules, multimedia lessons and structured eLearning materials that learners enjoy.",
-      image: "images/courses/elearning-content.jpg",
-      price: "\u20a625,000",
-      priceNum: 25000,
-      duration: "4 weeks",
-      level: "Intermediate",
-      format: "Self-Paced + Project-Based",
-      featured: false,
-      cat: "design",
-      specs: [
-        { label: "4 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Projects", sub: "Flexible with deliverables" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Portfolio-Ready", sub: "Build sample content" }
-      ],
-      outcomes: ["eLearning content authoring", "Multimedia integration", "Interactive content design", "Storytelling for learning", "Quality assurance standards"],
-      audience: ["Instructional designers expanding their skill set", "Training managers building in-house courses", "Content creators moving into eLearning", "HR professionals developing training materials"],
-      formatDetails: ["Self-paced lessons with project milestones", "Hands-on content creation projects", "Build portfolio-ready eLearning samples", "Certificate of completion when you finish", "Some design or teaching experience recommended"]
-    },
-    {
-      id: 7,
-      title: "Online Tutoring & Academic Support",
-      tagline: "Help learners thrive online.",
-      desc: "Develop effective online tutoring skills with a focus on understanding, confidence and strong foundational learning. Personalised approaches that work.",
-      image: "images/courses/online-tutoring.jpg",
-      price: "\u20a615,000",
-      priceNum: 15000,
-      duration: "2 weeks",
-      level: "All Levels",
-      format: "Self-Paced + Live Practice",
-      featured: false,
-      cat: "teaching",
-      specs: [
-        { label: "2 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Live Practice", sub: "Flexible with sessions" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Practical", sub: "Real tutoring practice" }
-      ],
-      outcomes: ["Online tutoring techniques", "Student engagement strategies", "Session planning", "Assessment and feedback", "Building student confidence"],
-      audience: ["Private tutors going online", "Teachers offering after-school support", "Homeschooling parents", "Academic coaches and mentors"],
-      formatDetails: ["Self-paced lessons with live practice sessions", "Real tutoring scenario practice", "Practical exercises you complete as you learn", "Certificate of completion when you finish", "Suitable for all experience levels"]
-    },
-    {
-      id: 8,
-      title: "Digital Product Creation",
-      tagline: "Turn knowledge into products.",
-      desc: "Turn your knowledge and expertise into valuable digital products including courses, guides, templates and toolkits. Learn ideation, design, pricing and launch.",
-      image: "images/courses/digital-product-creation.jpg",
-      price: "\u20a620,000",
-      priceNum: 20000,
-      duration: "3 weeks",
-      level: "All Levels",
-      format: "Self-Paced + Projects",
-      featured: false,
-      cat: "business digital-skills",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Projects", sub: "Flexible with deliverables" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Launch-Ready", sub: "Build your first product" }
-      ],
-      outcomes: ["Product ideation and validation", "Digital product design", "Content packaging", "Pricing and positioning", "Launch strategy"],
-      audience: ["Entrepreneurs monetising their expertise", "Coaches packaging their knowledge", "Educators creating supplementary materials", "Content creators diversifying income", "Subject-matter experts going digital"],
-      formatDetails: ["Self-paced lessons with project milestones", "Build a real digital product as you learn", "Practical pricing and launch exercises", "Certificate of completion when you finish", "Suitable for all experience levels"]
-    },
-    {
-      id: 9,
-      title: "Advanced Instructional Design",
-      tagline: "Design at the highest level.",
-      desc: "Go beyond the basics with advanced learning design strategies, complex curriculum mapping and evidence-based instructional frameworks for experienced designers.",
-      image: "images/courses/instructional-design.jpg",
-      price: "\u20a630,000",
-      priceNum: 30000,
-      duration: "5 weeks",
-      level: "Advanced",
-      format: "Self-Paced + Live Coaching",
-      featured: false,
-      cat: "design",
-      specs: [
-        { label: "5 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Coaching", sub: "Flexible with expert support" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Advanced", sub: "For experienced designers" }
-      ],
-      outcomes: ["Advanced learning theories", "Complex curriculum mapping", "Competency-based design", "Learning analytics", "Programme evaluation"],
-      audience: ["Experienced instructional designers", "Training leads managing large programmes", "Curriculum developers in education", "L&D professionals in corporations", "Academics designing higher-ed courses"],
-      formatDetails: ["Self-paced lessons with weekly coaching sessions", "Advanced design projects and case studies", "Peer discussion and expert feedback", "Certificate of completion when you finish", "Prior instructional design experience required"]
-    },
-    {
-      id: 10,
-      title: "AI-Powered Content Creation",
-      tagline: "Create faster with AI.",
-      desc: "Leverage AI tools to create high-quality educational content faster, from lesson plans and assessments to multimedia resources and interactive materials.",
-      image: "images/courses/ai-for-educators.jpg",
-      price: "\u20a622,000",
-      priceNum: 22000,
-      duration: "3 weeks",
-      level: "Intermediate",
-      format: "Self-Paced + Projects",
-      featured: false,
-      cat: "ai-tech",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Projects", sub: "Flexible with deliverables" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Hands-On", sub: "Real AI tool practice" }
-      ],
-      outcomes: ["AI content generation", "AI-assisted research", "Automated assessment creation", "Multimedia with AI tools", "Content quality control"],
-      audience: ["Educators wanting to speed up content creation", "Content creators exploring AI workflows", "Instructional designers automating repetitive tasks", "Trainers building materials faster"],
-      formatDetails: ["Self-paced lessons with project milestones", "Hands-on AI tool exercises", "Practical content creation projects", "Certificate of completion when you finish", "Basic familiarity with AI tools recommended"]
-    },
-    {
-      id: 11,
-      title: "Digital Productivity for Professionals",
-      tagline: "Work smarter, deliver more.",
-      desc: "Master the digital tools and workflows that help professionals work smarter, collaborate better and deliver more in less time. Practical and immediately applicable.",
-      image: "images/courses/digital-skills-teachers.jpg",
-      price: "\u20a615,000",
-      priceNum: 15000,
-      duration: "2 weeks",
-      level: "All Levels",
-      format: "Self-Paced",
-      featured: false,
-      cat: "digital-skills business",
-      specs: [
-        { label: "2 Weeks", sub: "Duration" },
-        { label: "Self-Paced", sub: "Study on your schedule" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Immediately Useful", sub: "Apply from day one" }
-      ],
-      outcomes: ["Digital productivity tools", "Cloud collaboration", "Workflow automation", "Time management with tech", "Professional digital portfolio"],
-      audience: ["Professionals wanting to work more efficiently", "Managers coordinating remote teams", "Entrepreneurs juggling multiple tasks", "Anyone looking to modernise their workflow"],
-      formatDetails: ["Self-paced lessons you can study around your schedule", "Practical exercises with real productivity tools", "Immediately applicable techniques", "Certificate of completion when you finish", "No prior experience needed"]
-    },
-    {
-      id: 12,
-      title: "Video Course Production",
-      tagline: "Produce professional video courses.",
-      desc: "Learn to plan, produce and edit professional video content for online courses, from scripting and recording to post-production and publishing.",
-      image: "images/courses/elearning-content.jpg",
-      price: "\u20a628,000",
-      priceNum: 28000,
-      duration: "4 weeks",
-      level: "Intermediate",
-      format: "Self-Paced + Hands-On",
-      featured: false,
-      cat: "design digital-skills",
-      specs: [
-        { label: "4 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Hands-On", sub: "Flexible with practice" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Portfolio-Ready", sub: "Produce sample videos" }
-      ],
-      outcomes: ["Video scripting and storyboarding", "Recording techniques", "Video editing fundamentals", "Screen capture and tutorials", "Publishing and distribution"],
-      audience: ["Educators creating video-based courses", "Content creators expanding to video", "Trainers producing internal training videos", "Entrepreneurs building video courses"],
-      formatDetails: ["Self-paced lessons with hands-on projects", "Real video production exercises", "Build portfolio-ready video samples", "Certificate of completion when you finish", "Some familiarity with content creation recommended"]
-    },
-    {
-      id: 13,
-      title: "LMS Administration & Management",
-      tagline: "Run your LMS with confidence.",
-      desc: "Gain the skills to administer, manage and optimise a Learning Management System for schools, organisations or training providers. Covers user management and analytics.",
-      image: "images/courses/lms-course-creators.jpg",
-      price: "\u20a620,000",
-      priceNum: 20000,
-      duration: "3 weeks",
-      level: "Intermediate",
-      format: "Self-Paced + Live Q&A",
-      featured: false,
-      cat: "ai-tech business",
-      specs: [
-        { label: "3 Weeks", sub: "Duration" },
-        { label: "Self-Paced + Live Q&A", sub: "Flexible with support" },
-        { label: "Certificate", sub: "Certificate of completion" },
-        { label: "Hands-On", sub: "Real LMS admin practice" }
-      ],
-      outcomes: ["LMS administration", "User and role management", "Course enrolment workflows", "Reporting and analytics", "Troubleshooting and support"],
-      audience: ["IT administrators managing learning platforms", "School coordinators running eLearning programmes", "Training managers overseeing LMS operations", "HR teams administering staff training platforms", "LMS support staff needing structured training"],
-      formatDetails: ["Self-paced lessons with weekly live Q&A", "Hands-on LMS administration exercises", "Real-world troubleshooting scenarios", "Certificate of completion when you finish", "Some LMS experience recommended"]
-    }
-  ];
+  var COURSES = [];
 
   window.ETH_COURSES = COURSES;
 
@@ -371,6 +69,17 @@
     };
   }
 
+  function isLegacySeed(c) {
+    var text = String(c.title || "") + " " + String(c.tagline || "") + " " + String(c.desc || "");
+    if (text.toLowerCase().indexOf("orientation to your learning journey") !== -1) return true;
+    var modules = c.modules || [];
+    for (var i = 0; i < modules.length; i++) {
+      var mid = modules[i] && modules[i].id;
+      if (mid === "dm1" || mid === "dm2") return true;
+    }
+    return false;
+  }
+
   function catalogCourses() {
     if (!window.ETH || !window.ETH.readCatalog) return [];
     var list = [];
@@ -379,16 +88,15 @@
     (list || []).forEach(function (c) {
       if (!c || c.published === false) return;
       if (!String(c.title || "").trim()) return;
+      if (isLegacySeed(c)) return;
       out.push(toPublicCourse(c));
     });
     return out;
   }
 
   var catalog = catalogCourses();
-  if (catalog.length) {
-    COURSES = COURSES.concat(catalog);
-    window.ETH_COURSES = COURSES;
-  }
+  COURSES = catalog;
+  window.ETH_COURSES = COURSES;
 
   var header = document.querySelector(".site-header");
   var navToggle = document.querySelector(".nav-toggle");
@@ -492,8 +200,15 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
     if (catalogGrid) grids.push(catalogGrid);
     if (miniGrid) grids.push(miniGrid);
     if (!grids.length) return;
+    if (!COURSES.length) {
+      grids.forEach(function (grid) {
+        grid.insertAdjacentHTML("beforeend", catalogEmptyHTML());
+      });
+      var sec = miniGrid ? document.getElementById("courses") : null;
+      if (sec) sec.style.display = "none";
+      return;
+    }
     COURSES.forEach(function (course) {
-      if (course.id < 100) return;
       if (!course.title) return;
       grids.forEach(function (grid) {
         if (!grid.querySelector('[data-course-id="' + course.id + '"]')) {
@@ -501,6 +216,15 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
         }
       });
     });
+  }
+
+  function catalogEmptyHTML() {
+    return (
+      '<div class="catalog-empty">' +
+      "<strong>New courses are on the way</strong>" +
+      "<p>Courses created by our team will appear here as soon as they are published.</p>" +
+      "</div>"
+    );
   }
 
   if (toTop) {

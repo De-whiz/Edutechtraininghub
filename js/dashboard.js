@@ -1129,7 +1129,7 @@
       );
       grid.innerHTML = list.length
         ? list.map(tileHTML).join("")
-        : '<div class="empty-state"><h3>No matches</h3><p>Try a different search term.</p></div>';
+        : '<div class="empty-state"><h3>' + (COURSES.length ? "No matches" : "No courses yet") + "</h3><p>" + (COURSES.length ? "Try a different search term." : "Courses published by our team will appear here.") + "</p></div>";
     }
 
     document.getElementById("browseSearch").addEventListener("input", apply);
