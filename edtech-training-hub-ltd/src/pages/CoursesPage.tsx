@@ -13,6 +13,7 @@ import {
   inCart,
   removeFromCart,
 } from '../utils/cart';
+import { Reveal } from '../components/Reveal';
 import {
   CheckCircle2,
   Calendar,
@@ -79,7 +80,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
     <div className="space-y-20 sm:space-y-28 pb-20">
       {/* 1. HERO SECTION */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100/60 pt-16 pb-14 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1E4E79] tracking-tight leading-tight">
             Learn the Skills to Teach, Create and Thrive Digitally
           </h1>
@@ -105,12 +106,12 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               Enrol in 5-Week Masterclass (₦30,000)
             </button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 2. COURSE CATALOGUE */}
       <section id="catalogue" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 scroll-mt-28">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
             </span>
@@ -134,10 +135,10 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               className="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0F6B78]"
             />
           </div>
-        </div>
+        </Reveal>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-200">
+        <Reveal className="flex flex-wrap gap-2 pb-2 border-b border-slate-200">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -151,14 +152,15 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               {cat}
             </button>
           ))}
-        </div>
+        </Reveal>
 
         {/* Course Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
-            <div
+          {filteredCourses.map((course, idx) => (
+            <Reveal
               key={course.id}
-              className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between"
+              delay={(idx % 6) * 0.06}
+              className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -242,7 +244,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                   </button>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
 
@@ -266,7 +268,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
 
       {/* 3. FEATURED PROGRAMME (COMPLETE SYLLABUS BREAKDOWN) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-[#102A45] via-[#1E4E79] to-[#0F6B78] rounded-3xl text-white p-8 sm:p-14 shadow-2xl relative overflow-hidden">
+        <Reveal className="bg-gradient-to-br from-[#102A45] via-[#1E4E79] to-[#0F6B78] rounded-3xl text-white p-8 sm:p-14 shadow-2xl relative overflow-hidden">
           <div className="max-w-4xl space-y-8">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
@@ -372,12 +374,12 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               </a>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 4. OUR TRAINING APPROACH */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8">
+        <Reveal className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8">
           <div className="max-w-3xl space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0F6B78]">
             </span>
@@ -399,7 +401,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               {trainingApproachPoints.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2.5"
+                  className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2.5 hover:border-[#0F6B78]/40 transition-colors"
                 >
                   <span className="w-2 h-2 rounded-full bg-[#F15A29] shrink-0" />
                   <span className="text-xs font-bold text-slate-800">{item}</span>
@@ -407,12 +409,12 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
               ))}
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 5. WHO ARE OUR COURSES FOR? */}
       <section className="bg-slate-100/70 border-y border-slate-200 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0F6B78]">
             </span>
@@ -429,14 +431,14 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
             {courseAudienceList.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex items-center gap-2.5"
+                className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex items-center gap-2.5 hover:border-[#0F6B78]/40 transition-colors"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-[#F15A29]" />
                 <span className="text-xs font-bold text-slate-800">{item}</span>
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

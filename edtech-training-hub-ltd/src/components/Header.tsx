@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { PageId, CourseItem } from '../types';
 import { CART_EVENT } from '../utils/cart';
 import { CartDrawer } from './CartDrawer';
@@ -22,14 +23,12 @@ import {
 interface HeaderProps {
   currentPage: PageId;
   onNavigate: (page: PageId, targetId?: string) => void;
-  onOpenEnrollment: (courseTitle?: string) => void;
   onOpenPurchase: (courses: CourseItem[]) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentPage,
   onNavigate,
-  onOpenEnrollment,
   onOpenPurchase,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,6 +36,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [solutionsSubMenuOpen, setSolutionsSubMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const syncAccountState = () => {
@@ -107,6 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
     onNavigate(page, targetId);
     setMobileMenuOpen(false);
     setSolutionsDropdownOpen(false);
+    setSolutionsSubMenuOpen(false);
   };
 
   return (
@@ -118,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5 text-slate-200">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Abuja, Nigeria &bull; EdTech Training Hub Ltd
+              Abuja, Nigeria &bull; EdTech Training Hub
             </span>
             <span className="hidden md:inline text-slate-300/60">|</span>
             <span className="hidden md:inline text-slate-200">
@@ -159,23 +161,14 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Brand Logo */}
           <button
             onClick={() => handleNav('home')}
-            className="flex items-center gap-3 text-left group focus:outline-none"
+            className="flex items-center text-left group focus:outline-none"
             aria-label="EdTech Training Hub Home"
           >
             <img
               src="/images/logo/Logo.jpeg"
-              alt=""
-              className="w-11 h-11 rounded-xl object-contain shadow-sm shadow-[#1E4E79]/20 group-hover:scale-105 transition-transform duration-200"
+              alt="EdTech Training Hub"
+              className="h-9 sm:h-11 w-auto object-contain drop-shadow-sm group-hover:scale-105 group-hover:drop-shadow-md transition-all duration-200"
             />
-            <div>
-              <div className="font-extrabold text-xl tracking-tight text-[#1E4E79] leading-tight group-hover:text-[#F15A29] transition-colors">
-                EdTech <span className="text-[#0F6B78]">Training</span>{' '}
-                <span className="text-[#F15A29]">Hub</span>
-              </div>
-              <div className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
-                Ltd &bull; Education &bull; Technology &bull; Design
-              </div>
-            </div>
           </button>
 
           {/* Desktop Nav Items */}
@@ -225,44 +218,65 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
 
               {/* Dropdown Menu */}
-              {solutionsDropdownOpen && (
-                <div className="absolute left-0 mt-1 w-84 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Major Solution Categories
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    {solutionLinks.map((item) => {
-                      const IconComp = item.icon;
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => handleNav('solutions', item.id)}
-                          className="w-full text-left flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-50 transition-colors group/item"
-                        >
-                          <div className="p-1.5 rounded-md bg-slate-100 group-hover/item:bg-slate-200/70 transition-colors">
-                            <IconComp className={`w-4 h-4 ${item.color}`} />
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold text-slate-800 group-hover/item:text-[#1E4E79]">
-                              {item.title}
-                            </p>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className="pt-2 mt-1 border-t border-slate-100">
-                    <button
-                      onClick={() => handleNav('solutions')}
-                      className="w-full text-center text-xs font-bold text-[#0F6B78] hover:text-[#1E4E79] py-1.5 block"
-                    >
-                      View All Solutions &rarr;
-                    </button>
-                  </div>
-                </div>
-              )}
+              <AnimatePresence>
+                {solutionsDropdownOpen && (
+                  <motion.div
+                    initial={
+                      reduceMotion
+                        ? { opacity: 1, y: 0 }
+                        : { opacity: 0, y: 8, scale: 0.98 }
+                    }
+                    animate={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, scale: 1 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute left-0 mt-1 w-84 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50"
+                  >
+                    <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Major Solution Categories
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      {solutionLinks.map((item, i) => {
+                        const IconComp = item.icon;
+                        return (
+                          <motion.div
+                            key={item.id}
+                            initial={reduceMotion ? { opacity: 1 } : { opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.18,
+                              delay: reduceMotion ? 0 : 0.03 + i * 0.035,
+                            }}
+                          >
+                            <button
+                              onClick={() => handleNav('solutions', item.id)}
+                              className="w-full text-left flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-50 transition-colors group/item"
+                            >
+                              <div className="p-1.5 rounded-md bg-slate-100 group-hover/item:bg-slate-200/70 transition-colors">
+                                <IconComp className={`w-4 h-4 ${item.color}`} />
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-slate-800 group-hover/item:text-[#1E4E79]">
+                                  {item.title}
+                                </p>
+                              </div>
+                            </button>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                    <div className="pt-2 mt-1 border-t border-slate-100">
+                      <button
+                        onClick={() => handleNav('solutions')}
+                        className="w-full text-center text-xs font-bold text-[#0F6B78] hover:text-[#1E4E79] py-1.5 block"
+                      >
+                        View All Solutions &rarr;
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <button
@@ -399,30 +413,76 @@ export const Header: React.FC<HeaderProps> = ({
               About
             </button>
             <button
-              onClick={() => handleNav('solutions')}
-              className={`text-left px-3 py-2.5 rounded-lg flex items-center justify-between ${
+              onClick={() => setSolutionsSubMenuOpen(!solutionsSubMenuOpen)}
+              aria-expanded={solutionsSubMenuOpen}
+              className={`text-left px-3 py-2.5 rounded-lg flex items-center justify-between w-full ${
                 currentPage === 'solutions'
                   ? 'bg-[#F15A29]/10 text-[#F15A29] font-bold'
                   : 'text-slate-800 hover:bg-slate-100'
               }`}
             >
-              <span>Solutions & Services</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600">5 Areas</span>
+              <span>Solutions &amp; Services</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  solutionsSubMenuOpen ? 'rotate-180 text-[#F15A29]' : 'text-slate-400'
+                }`}
+              />
             </button>
 
-            {/* Sub-services links on mobile */}
-            <div className="pl-4 pr-1 py-1 space-y-1 bg-slate-50 rounded-lg">
-              {solutionLinks.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleNav('solutions', item.id)}
-                  className="text-left w-full text-xs py-1.5 px-2 text-slate-700 hover:text-[#1E4E79] flex items-center gap-2"
+            {/* Sub-services links on mobile — mirrors desktop dropdown, toggleable */}
+            <AnimatePresence initial={false}>
+              {solutionsSubMenuOpen && (
+                <motion.div
+                  initial={reduceMotion ? { opacity: 0, height: 0 } : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F6B78]"></span>
-                  <span>{item.title}</span>
-                </button>
-              ))}
-            </div>
+                  <div className="pl-4 pr-1 py-2 space-y-1 bg-slate-50 rounded-lg">
+                    <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Major Solution Categories
+                      </p>
+                    </div>
+                    {solutionLinks.map((item, i) => {
+                      const IconComp = item.icon;
+                      return (
+                        <motion.div
+                          key={item.id}
+                          initial={reduceMotion ? { opacity: 1 } : { opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            duration: 0.18,
+                            delay: reduceMotion ? 0 : 0.03 + i * 0.03,
+                          }}
+                        >
+                          <button
+                            onClick={() => handleNav('solutions', item.id)}
+                            className="w-full text-left flex items-center gap-3 p-2 rounded-lg hover:bg-white transition-colors group/item"
+                          >
+                            <div className="p-1.5 rounded-md bg-slate-100 group-hover/item:bg-slate-200/70 transition-colors">
+                              <IconComp className={`w-4 h-4 ${item.color}`} />
+                            </div>
+                            <span className="text-xs font-semibold text-slate-700 group-hover/item:text-[#1E4E79]">
+                              {item.title}
+                            </span>
+                          </button>
+                        </motion.div>
+                      );
+                    })}
+                    <div className="pt-2 mt-1 border-t border-slate-100">
+                      <button
+                        onClick={() => handleNav('solutions')}
+                        className="w-full text-center text-xs font-bold text-[#0F6B78] hover:text-[#1E4E79] py-1.5 block"
+                      >
+                        View All Solutions &rarr;
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <button
               onClick={() => handleNav('courses')}
@@ -457,20 +517,37 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
+            {isLoggedIn ? (
+              <a
+                href="../dashboard.html"
+                className="w-full text-center py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-[#1E4E79] font-bold text-sm flex items-center justify-center gap-2"
+              >
+                <UserRound className="w-4 h-4" />
+                My Dashboard
+              </a>
+            ) : (
+              <button
+                onClick={() => handleNav('login')}
+                className="w-full text-center py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-[#1E4E79] font-bold text-sm flex items-center justify-center gap-2"
+              >
+                <UserRound className="w-4 h-4" />
+                Log In
+              </button>
+            )}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onOpenEnrollment('Digital Skills & Online Teaching Masterclass');
+                setIsCartOpen(true);
               }}
-              className="w-full text-center py-2.5 px-4 rounded-lg bg-[#0F6B78] text-white font-bold text-sm"
+              className="relative w-full text-center py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-[#0F6B78] font-bold text-sm flex items-center justify-center gap-2"
             >
-              Enrol in Masterclass (₦30,000)
-            </button>
-            <button
-              onClick={() => handleNav('contact')}
-              className="w-full text-center py-2.5 px-4 rounded-lg bg-[#F15A29] text-white font-bold text-sm"
-            >
-              Work With Us &bull; Send Enquiry
+              <ShoppingCart className="w-4 h-4" />
+              View Cart
+              {cartCount > 0 && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 min-w-4 h-4 px-1 rounded-full bg-[#F15A29] text-white text-[10px] leading-4 text-center">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>

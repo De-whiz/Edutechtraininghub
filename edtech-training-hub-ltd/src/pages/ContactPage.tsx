@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PageId, ContactFormData } from '../types';
+import { Reveal } from '../components/Reveal';
 import {
   MapPin,
   Phone,
@@ -69,7 +70,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
     <div className="space-y-20 sm:space-y-28 pb-20">
       {/* 1. HERO SECTION */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100/60 pt-16 pb-14 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1E4E79] tracking-tight leading-tight">
             Let&apos;s Build Better Learning Experiences Together
           </h1>
@@ -79,7 +80,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             organisation or learner, we&apos;d love to hear from you. Get in
             touch with us and let&apos;s discuss how we can help.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* 2. MAIN CONTACT DETAILS & FORM */}
@@ -87,7 +88,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Official Contact Info Cards */}
           <div className="lg:col-span-5 space-y-6">
-            <div>
+            <Reveal>
               <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
                 Contact EdTech Training Hub Ltd
               </span>
@@ -98,7 +99,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 Serving clients, educators, and institutions across Nigeria, West
                 Africa, and globally via modern digital learning channels.
               </p>
-            </div>
+            </Reveal>
 
             {/* Contact Cards */}
             <div className="space-y-4">
@@ -206,17 +207,17 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Operating Promise */}
-            <div className="p-4 rounded-xl bg-slate-100/80 border border-slate-200 flex items-start gap-3">
+            <Reveal className="p-4 rounded-xl bg-slate-100/80 border border-slate-200 flex items-start gap-3">
               <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <p className="text-xs text-slate-600 leading-relaxed">
                 Registered corporate entity: <strong>EdTech Training Hub Ltd</strong>.
                 Committed to ethical, transparent, and learner-first educational solutions.
               </p>
-            </div>
+            </Reveal>
           </div>
 
           {/* Right Column: HOW CAN WE HELP? Contact Form */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-md relative">
+          <Reveal delay={0.1} className="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-md relative">
             <div className="mb-6 space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
                 HOW CAN WE HELP?
@@ -397,13 +398,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 </div>
               </form>
             )}
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* 3. CONNECT WITH US (Social Media section from prompt) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 text-center space-y-6">
+        <Reveal className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 text-center space-y-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Connect With Us
           </h2>
@@ -441,7 +442,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               <Instagram className="w-5 h-5" />
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

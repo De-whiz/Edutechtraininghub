@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageId } from '../types';
 import { solutionsData } from '../data/solutionsData';
+import { Reveal } from '../components/Reveal';
 import {
   Laptop,
   Compass,
@@ -78,7 +79,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
     <div className="space-y-20 sm:space-y-28 pb-20">
       {/* 1. HERO SECTION */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100/60 pt-16 pb-14 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1E4E79] tracking-tight leading-tight">
             Digital Learning & EdTech Solutions
           </h1>
@@ -101,12 +102,12 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               View Training Courses
             </button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Quick Category Jump Bar */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14">
-        <div className="bg-white rounded-2xl p-2.5 shadow-lg border border-slate-200 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-1.5">
+        <Reveal className="bg-white rounded-2xl p-2.5 shadow-lg border border-slate-200 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-1.5">
           {solutionsData.map((sol) => (
             <button
               key={sol.id}
@@ -126,12 +127,12 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               </span>
             </button>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* 2. THE 7 CORE SERVICES (DEEP DIVE CARDS) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="space-y-3 max-w-2xl">
+        <Reveal className="space-y-3 max-w-2xl">
           <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
@@ -141,15 +142,16 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
             Explore our comprehensive range of instructional design, technology setup,
             course creation, digital skills training, and academic support.
           </p>
-        </div>
+        </Reveal>
 
         <div className="space-y-10">
-          {solutionsData.map((sol) => {
+          {solutionsData.map((sol, idx) => {
             const IconComp = getSolutionIcon(sol.icon);
             return (
-              <div
+              <Reveal
                 key={sol.id}
                 id={sol.id}
+                delay={0.05}
                 className={`bg-white rounded-3xl p-8 sm:p-12 border transition-all scroll-mt-28 ${
                   activeCategory === sol.id
                     ? 'border-[#0F6B78] ring-2 ring-[#0F6B78]/20 shadow-xl'
@@ -257,7 +259,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
                     </div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>
@@ -265,7 +267,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
 
       {/* 3. WHO WE WORK WITH */}
       <section className="bg-slate-100/70 border-y border-slate-200 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0F6B78]">
             </span>
@@ -299,12 +301,12 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 4. WHY WORK WITH US? */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-14 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+        <Reveal className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-14 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-4 max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29] bg-white/10 px-3 py-1 rounded-full inline-block">
               Why Work With Us?
@@ -326,7 +328,7 @@ export const SolutionsPage: React.FC<SolutionsPageProps> = ({
               Start a Conversation
             </button>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

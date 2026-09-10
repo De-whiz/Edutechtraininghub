@@ -4,6 +4,7 @@ import { solutionsData } from '../data/solutionsData';
 import { homeAudienceGroups } from '../data/audienceData';
 import { featuredMasterclass } from '../data/coursesData';
 import { TestimonialsSection } from '../components/TestimonialsSection';
+import { Reveal } from '../components/Reveal';
 import heroBannerImg from '../assets/images/hero.jpg';
 import {
   ArrowRight,
@@ -104,7 +105,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+            <Reveal direction="right" className="lg:col-span-7 space-y-6 sm:space-y-8">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E4E79]/10 text-[#1E4E79] text-xs font-bold tracking-wide border border-[#1E4E79]/15">
                 <span className="w-2 h-2 rounded-full bg-[#F15A29]" />
@@ -174,16 +175,18 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div>
                   <div className="text-xl font-black text-[#0F6B78]">5 Weeks</div>
                   <div className="text-xs text-slate-500">Flagship Masterclass</div>
-                </div>
-                <div>
-                  <div className="text-xl font-black text-[#F15A29]">100%</div>
+                <div className="text-xl font-black text-[#F15A29]">100%</div>
                   <div className="text-xs text-slate-500">Practical & Hands-On</div>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right Graphic / Educational Technology in Action */}
-            <div className="lg:col-span-5 relative">
+            <Reveal
+              direction="left"
+              delay={0.1}
+              className="lg:col-span-5 relative"
+            >
               <div className="relative mx-auto max-w-md lg:max-w-none">
                 {/* Main Image Frame */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-100 group">
@@ -233,14 +236,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* 2. TRUST / POSITIONING SECTION */}
       <section className="bg-white border-y border-slate-200 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
             Education &bull; Technology &bull; Learning Design &bull; Practical Skills
           </h2>
@@ -248,12 +251,12 @@ export const HomePage: React.FC<HomePageProps> = ({
             &ldquo;We combine education expertise with technology and learning design
             to help people teach, learn and create more effectively in the digital age.&rdquo;
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* 3. INTRODUCTION SECTION: Where Education Meets Technology */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-slate-900 via-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 lg:p-16 text-white shadow-xl relative overflow-hidden">
+        <Reveal className="bg-gradient-to-br from-slate-900 via-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 lg:p-16 text-white shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-2xl pointer-events-none" />
           <div className="max-w-3xl space-y-6">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
@@ -290,12 +293,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               </button>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 4. OUR SOLUTIONS (WHAT WE DO) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
               What We Do
@@ -312,16 +315,17 @@ export const HomePage: React.FC<HomePageProps> = ({
             <span>Explore all 7 services in detail</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
-        </div>
+        </Reveal>
 
         {/* 7 Distinct Services Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {solutionsData.map((sol) => {
+          {solutionsData.map((sol, idx) => {
             const IconComp = getSolutionIcon(sol.icon);
             return (
-              <div
+              <Reveal
                 key={sol.id}
-                className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between group"
+                delay={idx * 0.06}
+                className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -380,12 +384,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
 
           {/* 8th Card: Custom Ecosystem Advisory Card */}
-          <div className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-2xl p-7 text-white shadow-sm flex flex-col justify-between">
+          <Reveal
+            delay={0.42}
+            className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-2xl p-7 text-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between"
+          >
             <div className="space-y-4">
               <h3 className="text-xl font-bold leading-snug">
                 Need a Custom Combination of Solutions?
@@ -405,13 +412,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* 5. WHO WE SERVE SECTION (Grouped cleanly into 5 cards) */}
       <section className="bg-slate-100/70 border-y border-slate-200 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
               Solutions for Different Learning Needs
@@ -423,13 +430,14 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {homeAudienceGroups.map((aud) => {
+            {homeAudienceGroups.map((aud, idx) => {
               const IconComp = getAudienceIcon(aud.icon);
               return (
-                <div
+                <Reveal
                   key={aud.id}
+                  delay={idx * 0.06}
                   onClick={() => onNavigate('who-we-serve', aud.id)}
-                  className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-[#1E4E79]/30 transition-all space-y-3 cursor-pointer group flex flex-col justify-between"
+                  className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-[#1E4E79]/30 hover:-translate-y-1 transition-all space-y-3 cursor-pointer group flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     <div className="w-10 h-10 rounded-xl bg-[#1E4E79]/10 text-[#1E4E79] flex items-center justify-center group-hover:bg-[#1E4E79] group-hover:text-white transition-colors">
@@ -446,12 +454,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <span>Learn more</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
-                </div>
+                </Reveal>
               );
             })}
           </div>
 
-          <div className="text-center pt-2">
+          <Reveal className="text-center pt-2">
             <button
               onClick={() => onNavigate('who-we-serve')}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#1E4E79] hover:bg-[#163959] text-white text-xs font-bold shadow-sm transition-all active:scale-95"
@@ -459,8 +467,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>Explore Complete Audience Profiles & Dedicated Solutions</span>
               <ArrowRight className="w-4 h-4" />
             </button>
-          </div>
-        </div>
+          </Reveal>
+        </Reveal>
       </section>
 
       {/* TESTIMONIALS & COMMUNITY FEEDBACK */}
@@ -471,7 +479,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="bg-white rounded-3xl border-2 border-[#F15A29]/20 shadow-xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* Left Content */}
-            <div className="lg:col-span-8 p-8 sm:p-12 space-y-6">
+            <Reveal
+              direction="right"
+              className="lg:col-span-8 p-8 sm:p-12 space-y-6"
+            >
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="px-3 py-1 rounded-full bg-[#F15A29] text-white text-xs font-bold tracking-wide">
                   FEATURED PROGRAMME
@@ -542,10 +553,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <span>Explore Full Curriculum</span>
                 </button>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right Details Strip */}
-            <div className="lg:col-span-4 bg-gradient-to-b from-slate-900 to-[#1E4E79] text-white p-8 sm:p-12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-700">
+            <Reveal
+              direction="left"
+              delay={0.1}
+              className="lg:col-span-4 bg-gradient-to-b from-slate-900 to-[#1E4E79] text-white p-8 sm:p-12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-700"
+            >
               <div className="space-y-6">
                 <div>
                   <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
@@ -595,14 +610,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                   Secure Your Place &rarr;
                 </button>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* 7. WHY EDTECH TRAINING HUB? */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center space-y-3 max-w-4xl mx-auto">
+        <Reveal className="text-center space-y-3 max-w-4xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
             Why EdTech Training Hub?
           </span>
@@ -613,11 +628,14 @@ export const HomePage: React.FC<HomePageProps> = ({
             Technology should not replace good teaching. It should make good
             teaching better.
           </p>
-        </div>
+        </Reveal>
 
         {/* 4 Value Propositions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+          <Reveal
+            delay={0.05}
+            className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all space-y-3"
+          >
             <div className="w-10 h-10 rounded-xl bg-[#F15A29]/10 text-[#F15A29] flex items-center justify-center font-bold">
               01
             </div>
@@ -629,9 +647,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               every lesson translates to your actual classroom, course, or
               workflow.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+          <Reveal
+            delay={0.1}
+            className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all space-y-3"
+          >
             <div className="w-10 h-10 rounded-xl bg-[#0F6B78]/10 text-[#0F6B78] flex items-center justify-center font-bold">
               02
             </div>
@@ -643,9 +664,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               replace good teaching.&rdquo; Pedagogy and human understanding always
               come first.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+          <Reveal
+            delay={0.15}
+            className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all space-y-3"
+          >
             <div className="w-10 h-10 rounded-xl bg-[#1E4E79]/10 text-[#1E4E79] flex items-center justify-center font-bold">
               03
             </div>
@@ -657,9 +681,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               learn.&rdquo; Graduate with tangible curricula, slides, rubrics, and
               digital products.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+          <Reveal
+            delay={0.2}
+            className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all space-y-3"
+          >
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
               04
             </div>
@@ -671,11 +698,11 @@ export const HomePage: React.FC<HomePageProps> = ({
               advanced skills.&rdquo; Accessible for beginners and deeply valuable for
               experienced educators.
             </p>
-          </div>
+          </Reveal>
         </div>
 
         {/* Philosophy Visual Box */}
-        <div className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 text-white shadow-lg relative overflow-hidden">
+        <Reveal className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 text-white shadow-lg relative overflow-hidden">
           <div className="max-w-3xl space-y-6">
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
               Technology Should Make Good Teaching Better.
@@ -697,12 +724,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               designed for real-world application.
             </p>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 8. FINAL CTA */}
       <section className="bg-slate-900 text-white py-16 sm:py-20 border-t border-slate-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
             Ready to Teach, Learn or Create in the Digital Age?
           </h2>
@@ -726,7 +753,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               Contact Us &bull; Abuja, Nigeria
             </button>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

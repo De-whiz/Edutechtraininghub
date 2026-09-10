@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PageId } from '../types';
+import { Reveal } from '../components/Reveal';
 import { allAudiencesDetailed } from '../data/audienceData';
 import {
   GraduationCap,
@@ -57,7 +58,7 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
     <div className="space-y-20 sm:space-y-28 pb-20">
       {/* 1. HERO SECTION */}
       <section className="bg-gradient-to-b from-white via-slate-50 to-slate-100/60 pt-16 pb-14 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1E4E79] tracking-tight leading-tight">
             Who We Serve
           </h1>
@@ -79,12 +80,12 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
               Creators & Enterprises
             </span>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* 2. AUDIENCE QUICK NAV BAR */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14">
-        <div className="bg-white rounded-2xl p-2.5 shadow-lg border border-slate-200 flex flex-wrap items-center justify-center gap-1.5">
+        <Reveal className="bg-white rounded-2xl p-2.5 shadow-lg border border-slate-200 flex flex-wrap items-center justify-center gap-1.5">
           {allAudiencesDetailed.map((aud) => (
             <button
               key={aud.id}
@@ -102,28 +103,29 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
               {aud.title.split('&')[0].trim()}
             </button>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* 3. DETAILED SECTIONS FOR ALL 9 AUDIENCES */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="space-y-2">
+        <Reveal className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
            
           </span>
           <h2 className="text-3xl font-extrabold text-[#1E4E79] tracking-tight">
             How We Partner With You
           </h2>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allAudiencesDetailed.map((aud) => {
+          {allAudiencesDetailed.map((aud, idx) => {
             const IconComp = getAudienceIcon(aud.icon);
             const isSelected = selectedAudienceId === aud.id;
             return (
-              <div
+              <Reveal
                 key={aud.id}
                 id={aud.id}
+                delay={(idx % 6) * 0.06}
                 className={`bg-white rounded-3xl p-7 border transition-all flex flex-col justify-between scroll-mt-28 ${
                   isSelected
                     ? 'border-[#0F6B78] ring-2 ring-[#0F6B78]/20 shadow-lg'
@@ -197,7 +199,7 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>
@@ -205,7 +207,7 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
 
       {/* 4. NOT SURE WHERE TO START? */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+        <Reveal className="bg-gradient-to-br from-[#1E4E79] to-[#0F6B78] rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29] bg-white/10 px-3 py-1 rounded-full inline-block">
               
@@ -225,7 +227,7 @@ export const WhoWeServePage: React.FC<WhoWeServePageProps> = ({
           >
             Request Free Assessment Call
           </button>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

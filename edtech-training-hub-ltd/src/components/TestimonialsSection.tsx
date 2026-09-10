@@ -8,6 +8,7 @@ import {
   Building,
 } from 'lucide-react';
 import { SubmitTestimonialModal } from './SubmitTestimonialModal';
+import { Reveal } from './Reveal';
 
 interface TestimonialsSectionProps {
   onOpenConsultation?: () => void;
@@ -64,7 +65,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 scroll-mt-28"
     >
       {/* 1. SECTION HEADER & ACTION */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
             What Our Community Says
@@ -94,7 +95,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             <span className="hidden sm:inline">Share on WhatsApp</span>
           </a>
         </div>
-      </div>
+      </Reveal>
 
       {/* 2. CATEGORY FILTER TABS */}
       <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200">
@@ -118,10 +119,11 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
 
       {/* 4. TESTIMONIAL CARDS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTestimonials.map((t) => (
-          <div
+        {filteredTestimonials.map((t, idx) => (
+          <Reveal
             key={t.id}
-            className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between space-y-6 relative group"
+            delay={(idx % 6) * 0.06}
+            className="bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-1 transition-all flex flex-col justify-between space-y-6 relative group"
           >
             <div className="space-y-4">
               {/* Rating & Group Badge */}
@@ -166,12 +168,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                 )}
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
       {/* 5. CALL TO ACTION FOR USERS TO SUBMIT THEIR OWN TESTIMONIALS */}
-      <div className="bg-slate-100/90 rounded-3xl p-8 sm:p-10 border border-slate-200/90 flex flex-col md:flex-row items-center justify-between gap-6">
+      <Reveal className="bg-slate-100/90 rounded-3xl p-8 sm:p-10 border border-slate-200/90 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl text-center md:text-left">
           <span className="text-xs font-bold uppercase tracking-wider text-[#F15A29]">
             Your Voice Matters
@@ -204,7 +206,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             <span>Send via WhatsApp</span>
           </a>
         </div>
-      </div>
+      </Reveal>
 
       {/* Interactive Modal for Testimonial Submission */}
       <SubmitTestimonialModal

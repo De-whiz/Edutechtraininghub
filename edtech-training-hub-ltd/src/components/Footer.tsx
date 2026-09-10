@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageId } from '../types';
+import { Reveal } from './Reveal';
 import {
   MapPin,
   Phone,
@@ -22,15 +23,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-700/80">
           {/* Column 1: Brand & Tagline */}
-          <div className="lg:col-span-2 space-y-4">
+          <Reveal className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F15A29] via-[#0F6B78] to-[#1E4E79] p-0.5 flex items-center justify-center">
-                <div className="w-full h-full bg-[#102A45] rounded-[9px] flex items-center justify-center font-black text-white text-sm">
-                  ET<span className="text-[#F15A29]">H</span>
-                </div>
-              </div>
+              <img
+                src="/images/logo/Logo.jpeg"
+                alt="EdTech Training Hub"
+                className="h-10 w-auto object-contain rounded-lg bg-white p-1 ring-1 ring-white/10 shadow-sm"
+              />
               <span className="font-extrabold text-xl text-white tracking-tight">
-                EdTech Training Hub <span className="text-xs text-[#F15A29] font-normal uppercase">Ltd</span>
+                EdTech Training Hub
               </span>
             </div>
 
@@ -71,10 +72,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
-          </div>
+          </Reveal>
 
           {/* Column 2: Navigation Links */}
-          <div className="space-y-3">
+          <Reveal delay={0.05} className="space-y-3">
             <p className="text-xs font-bold text-white uppercase tracking-wider">
               Navigation
             </p>
@@ -139,10 +140,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </button>
               </li>
             </ul>
-          </div>
+          </Reveal>
 
           {/* Column 3: Main Solutions */}
-          <div className="space-y-3">
+          <Reveal delay={0.1} className="space-y-3">
             <p className="text-xs font-bold text-white uppercase tracking-wider">
               Our Services
             </p>
@@ -211,10 +212,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </button>
               </li>
             </ul>
-          </div>
+          </Reveal>
 
           {/* Column 4: Contact & Location */}
-          <div className="space-y-3">
+          <Reveal delay={0.15} className="space-y-3">
             <p className="text-xs font-bold text-white uppercase tracking-wider">
               Contact Us
             </p>
@@ -265,21 +266,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </a>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <Reveal className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>&copy; {new Date().getFullYear()} EdTech Training Hub Ltd. All rights reserved.</span>
+            <span>&copy; {new Date().getFullYear()} EdTech Training Hub. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-6">
             <span className="text-slate-400">Technology Practical for Learning</span>
             <span>&bull;</span>
             <span>Abuja, Nigeria</span>
           </div>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );
