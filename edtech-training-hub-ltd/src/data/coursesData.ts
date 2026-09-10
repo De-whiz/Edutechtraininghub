@@ -1,0 +1,270 @@
+import { CourseItem } from '../types';
+
+export const featuredMasterclass: CourseItem = {
+  id: 'masterclass',
+  title: 'Digital Skills & Online Teaching Masterclass',
+  category: 'Online Teaching',
+  level: 'All Levels',
+  duration: '5 Weeks',
+  format: 'Self-Paced Lessons + Weekly Live Coaching & Q&A',
+  price: '₦30,000',
+  featured: true,
+  description:
+    'A 5-week practical programme designed to take participants from basic digital confidence to online teaching, curriculum and course design, digital content creation, and professional positioning',
+  secondaryDescription:
+    'Participants learn how to use essential digital and AI tools, teach effectively online, design a curriculum or course, create digital learning resources, and develop a professional portfolio and knowledge-based offer.',
+  whoIsItFor: [
+    'Teachers and educators',
+    'Online tutors',
+    'Trainers',
+    'Coaches',
+    'Consultants',
+    'Knowledge professionals',
+    'Subject-matter experts',
+    'Entrepreneurs',
+    'Anyone with knowledge or skills they want to teach or share online',
+  ],
+  whatYouLearn: [
+    'Essential digital skills',
+    'Basic AI skills',
+    'An online teaching sample',
+    'A curriculum/course/training outline',
+    'A digital learning resource or product',
+    'A professional portfolio',
+    'A knowledge-based offer',
+    'A simple launch plan',
+  ],
+};
+
+export const coursesCatalog: CourseItem[] = [
+  featuredMasterclass,
+  {
+    id: 'id-fundamentals',
+    title: 'Instructional Design Fundamentals',
+    category: 'Instructional Design',
+    level: 'Beginner',
+    duration: '4 Weeks',
+    format: 'Cohort-based & Practical Assignments',
+    price: '₦35,000',
+    description:
+      'Learn the foundations of learning science, ADDIE, Bloom’s taxonomy, and how to structure engaging learning pathways that produce measurable outcomes.',
+    whatYouLearn: [
+      'Foundations of learning theory and adult learning principles',
+      'Conducting practical learner needs assessments',
+      'Writing measurable learning outcomes with Bloom’s Revised Taxonomy',
+      'Structuring course modules, lesson plans, and formative evaluations',
+    ],
+  },
+  {
+    id: 'ai-educators',
+    title: 'AI for Educators',
+    category: 'AI & Technology',
+    level: 'All Levels',
+    duration: '3 Weeks',
+    format: 'Hands-on Workshops & Prompt Templates',
+    price: '₦25,000',
+    description:
+      'Understand how emerging generative AI technologies can save hours of preparation, personalize student support, and enhance pedagogical design responsibly.',
+    whatYouLearn: [
+      'Core principles of prompt engineering for educators',
+      'Automating lesson planning, rubrics, and quiz generation',
+      'AI tools for differentiated learning and student feedback',
+      'Academic integrity, ethics, and AI policy guidelines',
+    ],
+  },
+  {
+    id: 'lms-course-creators',
+    title: 'LMS for Course Creators',
+    category: 'LMS',
+    level: 'Intermediate',
+    duration: '3 Weeks',
+    format: 'Live Walkthroughs + Setup Blueprints',
+    price: '₦30,000',
+    description:
+      'Master the setup, content structuring, student management, and assessment workflows on modern Learning Management Systems without technical overwhelm.',
+    whatYouLearn: [
+      'Selecting the best LMS platform for your business model',
+      'Course architecture, module navigation, and drip scheduling',
+      'Integrating payment gateways, automated certificates, and quizzes',
+      'Student tracking, analytics, and retention workflows',
+    ],
+  },
+  {
+    id: 'digital-skills-teachers',
+    title: 'Digital Skills for Teachers',
+    category: 'Digital Skills',
+    level: 'Beginner',
+    duration: '4 Weeks',
+    format: 'Practical Guided Exercises',
+    price: '₦20,000',
+    description:
+      'Build digital confidence and master essential classroom technologies, interactive presentation tools, cloud collaboration, and digital assessment tools.',
+    whatYouLearn: [
+      'Google Workspace and Microsoft 365 for classroom workflows',
+      'Interactive presentation tools (Canva, Mentimeter, Genially)',
+      'Designing engaging multimedia learning artifacts',
+      'Digital gradebooks, feedback forms, and parent communication',
+    ],
+  },
+  {
+    id: 'elearning-content-dev',
+    title: 'eLearning Content Development',
+    category: 'Instructional Design',
+    level: 'Intermediate',
+    duration: '5 Weeks',
+    format: 'Project-Based Portfolio Course',
+    price: '₦40,000',
+    description:
+      'Transform static curricula into dynamic, interactive eLearning modules with storyboarding, multimedia authoring, and SCORM/xAPI packaging principles.',
+    whatYouLearn: [
+      'Instructional storyboarding and visual scripting',
+      'Authoring interactive micro-lessons and branching scenarios',
+      'Designing engaging voiceovers, animations, and visual diagrams',
+      'Exporting, testing, and troubleshooting SCORM-compliant modules',
+    ],
+  },
+  {
+    id: 'online-tutoring-support',
+    title: 'Online Tutoring & Academic Support',
+    category: 'Online Teaching',
+    level: 'All Levels',
+    duration: '3 Weeks',
+    format: 'Live Demonstration & Coaching',
+    price: '₦25,000',
+    description:
+      'Learn how to deliver high-impact, 1-on-1 and small-group online tutoring sessions that build student confidence, engagement, and foundational mastery.',
+    whatYouLearn: [
+      'Virtual classroom tools and digital whiteboarding mastery',
+      'Diagnostic assessment strategies to pinpoint student gaps',
+      'Session structuring, pacing, and interactive question techniques',
+      'Communicating progress with parents and building a tutoring client base',
+    ],
+  },
+  {
+    id: 'digital-product-creation',
+    title: 'Digital Product Creation',
+    category: 'Course Creation',
+    level: 'Intermediate',
+    duration: '4 Weeks',
+    format: 'Step-by-Step Creation Accelerator',
+    price: '₦35,000',
+    description:
+      'Turn your specialized knowledge and teaching assets into high-value digital products such as workbooks, toolkits, mini-courses, and masterclasses.',
+    whatYouLearn: [
+      'Validating knowledge offers before investing build time',
+      'Packaging digital templates, toolkits, and workbooks',
+      'Pricing models, packaging tiers, and product positioning',
+      'Simple landing page setup and frictionless digital delivery',
+    ],
+  },
+  {
+    id: 'advanced-instructional-design',
+    title: 'Advanced Instructional Design',
+    category: 'Instructional Design',
+    level: 'Advanced',
+    duration: '6 Weeks',
+    format: 'Masterclass + Capstone Peer Review',
+    price: '₦50,000',
+    description:
+      'Deepen your learning science mastery with scenario-based learning, cognitive load optimization, competency-based curricula, and enterprise evaluation.',
+    whatYouLearn: [
+      'Complex scenario-based and game-informed instructional frameworks',
+      'Applying Sweller’s Cognitive Load Theory to complex content',
+      'Kirkpatrick’s 4 Levels of Training Evaluation & business ROI metrics',
+      'Enterprise curriculum mapping and stakeholder management',
+    ],
+  },
+  {
+    id: 'ai-powered-content-creation',
+    title: 'AI-Powered Content Creation',
+    category: 'AI & Technology',
+    level: 'Intermediate',
+    duration: '3 Weeks',
+    format: 'Hands-on Labs & Workflow Blueprints',
+    price: '₦30,000',
+    description:
+      'Learn how to blend generative AI with educational design to produce scripts, instructional graphics, podcasts, and video snippets in half the time.',
+    whatYouLearn: [
+      'Multimodal AI tools for image, audio, and video synthesis',
+      'Generating consistent visual slides, infographics, and job aids',
+      'Automated transcript-to-summary learning workflows',
+      'Quality assurance methods to prevent AI inaccuracies',
+    ],
+  },
+  {
+    id: 'digital-productivity-professionals',
+    title: 'Digital Productivity for Professionals',
+    category: 'Digital Skills',
+    level: 'All Levels',
+    duration: '2 Weeks',
+    format: 'Practical Daily Habits & Systems',
+    price: '₦20,000',
+    description:
+      'Streamline administrative work, research, content curation, and schedule management with intelligent workflows and productivity systems.',
+    whatYouLearn: [
+      'Building a second brain for educational research and reference',
+      'Automating repetitive administrative and reporting tasks',
+      'Task batching, calendar defense, and asynchronous team collaboration',
+      'Cloud storage hygiene and instant file retrieval structures',
+    ],
+  },
+  {
+    id: 'video-course-production',
+    title: 'Video Course Production',
+    category: 'Course Creation',
+    level: 'Intermediate',
+    duration: '4 Weeks',
+    format: 'Studio Walkthrough & Video Labs',
+    price: '₦35,000',
+    description:
+      'Produce clear, professional educational videos with accessible equipment, crisp audio recording, engaging slide capture, and focused editing.',
+    whatYouLearn: [
+      'Budget-friendly lighting, microphone, and webcam configuration',
+      'Teleprompter scripts, pacing, and on-camera delivery confidence',
+      'Screen recording and lightweight video editing workflows',
+      'Exporting optimized video formats for seamless web streaming',
+    ],
+  },
+  {
+    id: 'lms-administration-mgmt',
+    title: 'LMS Administration & Management',
+    category: 'LMS',
+    level: 'Advanced',
+    duration: '5 Weeks',
+    format: 'System Configuration & Simulation',
+    price: '₦45,000',
+    description:
+      'In-depth training on user roles, cohort enrollment, gradebook formulas, database backups, security protocols, and third-party API plugins.',
+    whatYouLearn: [
+      'Role-based access control (RBAC) and user lifecycle management',
+      'Gradebook weighted categories, scales, and automated transcripts',
+      'LMS integration with Zoom, Google Meet, and payment gateways',
+      'Data reporting, learner completion analytics, and compliance audits',
+    ],
+  },
+];
+
+export const trainingApproachPoints = [
+  'Digital skills',
+  'AI and technology',
+  'Online teaching',
+  'Instructional design',
+  'Course development',
+  'Digital learning',
+  'Productivity',
+  'Content creation',
+];
+
+export const courseAudienceList = [
+  'Educators',
+  'Teachers',
+  'Online Tutors',
+  'Trainers',
+  'Coaches',
+  'Consultants',
+  'Knowledge Professionals',
+  'Instructional Designers',
+  'Entrepreneurs',
+  'Course Creators',
+  'Professionals looking to strengthen their digital skills',
+];

@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-orange: #F15A29;
+    --brand-teal: #0F6B78;
+    --brand-navy: #1E4E79;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom utility classes for brand styling */
+.text-brand-orange { color: #F15A29; }
+.bg-brand-orange { background-color: #F15A29; }
+.border-brand-orange { border-color: #F15A29; }
+
+.text-brand-teal { color: #0F6B78; }
+.bg-brand-teal { background-color: #0F6B78; }
+.border-brand-teal { border-color: #0F6B78; }
+
+.text-brand-navy { color: #1E4E79; }
+.bg-brand-navy { background-color: #1E4E79; }
+.border-brand-navy { border-color: #1E4E79; }
+

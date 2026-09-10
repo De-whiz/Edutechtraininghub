@@ -1,0 +1,8 @@
+{
+  "name": "EdTech Training Hub Ltd",
+  "description": "Empowering Better Learning Through Technology. Practical digital skills training, instructional design, eLearning, LMS solutions, and academic support in Abuja, Nigeria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
