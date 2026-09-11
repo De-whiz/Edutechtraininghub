@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { PageId, CourseItem } from '../types';
+import { PageId } from '../types';
 import { CART_EVENT } from '../utils/cart';
-import { CartDrawer } from './CartDrawer';
 import {
   Menu,
   X,
@@ -23,19 +22,18 @@ import {
 interface HeaderProps {
   currentPage: PageId;
   onNavigate: (page: PageId, targetId?: string) => void;
-  onOpenPurchase: (courses: CourseItem[]) => void;
+  onCartOpenChange: (open: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentPage,
   onNavigate,
-  onOpenPurchase,
+  onCartOpenChange,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [solutionsSubMenuOpen, setSolutionsSubMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -112,7 +110,6 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <>
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
       {/* Top micro-bar for quick contact */}
       <div className="bg-[#1E4E79] text-slate-100 text-xs py-1.5 px-4 sm:px-8 border-b border-[#163959]">
@@ -316,13 +313,13 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Account and cart actions */}
           <div className="hidden lg:flex items-center gap-3">
             {isLoggedIn ? (
-              <a
-                href="../dashboard.html"
+              <button
+                onClick={() => handleNav('dashboard')}
                 className="inline-flex items-center gap-2 text-xs font-bold text-[#1E4E79] hover:text-[#F15A29] px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
               >
                 <UserRound className="w-4 h-4" />
                 <span>Dashboard</span>
-              </a>
+              </button>
             ) : (
               <button
                 onClick={() => handleNav('login')}
@@ -333,7 +330,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
             <button
-              onClick={() => setIsCartOpen(true)}
+              onClick={() => onCartOpenChange(true)}
               className="relative inline-flex items-center justify-center p-2.5 rounded-lg text-[#1E4E79] hover:text-[#F15A29] hover:bg-slate-100 transition-colors"
               aria-label={`View cart${cartCount ? `, ${cartCount} items` : ''}`}
             >
@@ -349,13 +346,13 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Mobile Menu Toggle Button */}
           <div className="lg:hidden flex items-center gap-2">
             {isLoggedIn ? (
-              <a
-                href="../dashboard.html"
+              <button
+                onClick={() => handleNav('dashboard')}
                 className="p-2 rounded-lg text-[#1E4E79] hover:bg-slate-100"
                 aria-label="Open dashboard"
               >
                 <UserRound className="w-5 h-5" />
-              </a>
+              </button>
             ) : (
               <button
                 onClick={() => handleNav('login')}
@@ -366,7 +363,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
             <button
-              onClick={() => setIsCartOpen(true)}
+              onClick={() => onCartOpenChange(true)}
               className="relative p-2 rounded-lg text-[#1E4E79] hover:bg-slate-100"
               aria-label="View cart"
             >
@@ -518,13 +515,13 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
             {isLoggedIn ? (
-              <a
-                href="../dashboard.html"
+              <button
+                onClick={() => handleNav('dashboard')}
                 className="w-full text-center py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-[#1E4E79] font-bold text-sm flex items-center justify-center gap-2"
               >
                 <UserRound className="w-4 h-4" />
                 My Dashboard
-              </a>
+              </button>
             ) : (
               <button
                 onClick={() => handleNav('login')}
@@ -537,7 +534,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                setIsCartOpen(true);
+                onCartOpenChange(true);
               }}
               className="relative w-full text-center py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-[#0F6B78] font-bold text-sm flex items-center justify-center gap-2"
             >
@@ -553,14 +550,5 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       )}
     </header>
-
-    {/* Cart Side Panel — outside header so backdrop-filter/sticky don't trap the fixed drawer */}
-    <CartDrawer
-      isOpen={isCartOpen}
-      onClose={() => setIsCartOpen(false)}
-      onNavigate={handleNav}
-      onOpenPurchase={onOpenPurchase}
-    />
-    </>
   );
 };

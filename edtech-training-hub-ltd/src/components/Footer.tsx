@@ -123,12 +123,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('home', 'testimonials')}
-                  className="hover:text-white transition-colors flex items-center gap-1.5 text-left"
+                  className="hover:text-white transition-colors"
                 >
-                  <span>Testimonials</span>
-                  <span className="text-[10px] bg-[#F15A29] text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
-                    New
-                  </span>
+                  Testimonials
                 </button>
               </li>
               <li>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PageId } from '../types';
 import { AuthLayout } from '../components/AuthLayout';
 import { signup, passwordScore } from '../utils/auth';
+import { getPendingCheckout } from '../utils/account';
 import { Eye, EyeOff, Mail, Lock, UserRound, Phone, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface SignupPageProps {
@@ -48,10 +49,15 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
       }
       setAlert({
         type: 'success',
-        message: `Account created! Welcome aboard, ${res.user?.fname}. Opening your dashboard\u2026`,
+        message: `Account created! Welcome aboard, ${res.user?.fname}. Taking you to your dashboard\u2026`,
       });
       setTimeout(() => {
-        window.location.href = '../dashboard.html';
+        const pending = getPendingCheckout();
+        if (pending) {
+          onNavigate(pending.returnPage, pending.returnTarget);
+          return;
+        }
+        onNavigate('dashboard');
       }, 900);
     }, 550);
   };

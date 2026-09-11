@@ -3,22 +3,17 @@ import { TestimonialItem } from '../types';
 import { initialTestimonials } from '../data/testimonialsData';
 import {
   Star,
-  PlusCircle,
   MessageSquare,
   Building,
 } from 'lucide-react';
-import { SubmitTestimonialModal } from './SubmitTestimonialModal';
 import { Reveal } from './Reveal';
 
 interface TestimonialsSectionProps {
   onOpenConsultation?: () => void;
 }
 
-export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
-  onOpenConsultation,
-}) => {
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialTestimonials);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('All');
 
   // Load custom submissions from localStorage on mount
@@ -40,10 +35,6 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       // Ignore local storage parse error
     }
   }, []);
-
-  const handleTestimonialAdded = (newTestimonial: TestimonialItem) => {
-    setTestimonials((prev) => [newTestimonial, ...prev]);
-  };
 
   const categories = [
     'All',
@@ -78,13 +69,6 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
 
         {/* CTA TO SUBMIT TESTIMONIAL BUTTON */}
         <div className="shrink-0 flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#F15A29] hover:bg-[#d9491d] text-white font-extrabold text-xs shadow-md hover:shadow-lg transition-all active:scale-95"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Submit Your Testimonial</span>
-          </button>
           <a
             href="https://wa.me/2348063383339?text=Hello%20EdTech%20Training%20Hub,%20I%20would%20like%20to%20share%20a%20testimonial%20about%20your%20services."
             target="_blank"
@@ -189,18 +173,11 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
         </div>
 
         <div className="shrink-0 flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#1E4E79] hover:bg-[#163959] text-white font-extrabold text-xs shadow-md transition-all active:scale-95 text-center flex items-center justify-center gap-2"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Submit Your Testimonial</span>
-          </button>
           <a
             href="https://wa.me/2348063383339?text=Hello%20EdTech%20Training%20Hub,%20I%20would%20like%20to%20send%20my%20testimonial%20and%20review."
             target="_blank"
             rel="noreferrer"
-            className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-emerald-700 border border-slate-300 font-bold text-xs shadow-xs transition-colors text-center flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-emerald-700 border border-slate-300 font-bold text-xs shadow-xs transition-colors text-center flex items-center justify-center gap-2"
           >
             <MessageSquare className="w-4 h-4 text-emerald-600" />
             <span>Send via WhatsApp</span>
@@ -208,12 +185,6 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
         </div>
       </Reveal>
 
-      {/* Interactive Modal for Testimonial Submission */}
-      <SubmitTestimonialModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onTestimonialAdded={handleTestimonialAdded}
-      />
-    </section>
+          </section>
   );
 };

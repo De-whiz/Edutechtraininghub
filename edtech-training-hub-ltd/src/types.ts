@@ -7,7 +7,8 @@ export type PageId =
   | 'contact'
   | 'login'
   | 'signup'
-  | 'forgot-password';
+  | 'forgot-password'
+  | 'dashboard';
 
 export interface SolutionItem {
   id: string;

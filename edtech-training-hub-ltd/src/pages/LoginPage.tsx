@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PageId } from '../types';
 import { AuthLayout } from '../components/AuthLayout';
 import { login } from '../utils/auth';
+import { getPendingCheckout } from '../utils/account';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface LoginPageProps {
@@ -31,10 +32,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
       }
       setAlert({
         type: 'success',
-        message: `Welcome back, ${res.user?.fname}! Taking you to your dashboard\u2026`,
+        message: `Welcome back, ${res.user?.fname}! Taking you back to your dashboard\u2026`,
       });
       setTimeout(() => {
-        window.location.href = '../dashboard.html';
+        const pending = getPendingCheckout();
+        if (pending) {
+          onNavigate(pending.returnPage, pending.returnTarget);
+          return;
+        }
+        onNavigate('dashboard');
       }, 650);
     }, 450);
   };

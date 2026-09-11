@@ -16,6 +16,10 @@ import { EnrollmentModal } from './components/EnrollmentModal';
 import { PurchaseModal } from './components/PurchaseModal';
 import { PageLoader } from './components/PageLoader';
 import { WhatsAppButton } from './components/WhatsAppButton';
+import { CartDrawer } from './components/CartDrawer';
+import { DashboardPage } from './pages/DashboardPage';
+import { currentUser } from './utils/auth';
+import { clearPendingCheckout, getPendingCheckout } from './utils/account';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
@@ -29,6 +33,7 @@ export default function App() {
   const [purchaseCourses, setPurchaseCourses] = useState<CourseItem[] | null>(
     null
   );
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Sync hash with page on mount and hashchange
   useEffect(() => {
@@ -46,6 +51,7 @@ export default function App() {
           'login',
           'signup',
           'forgot-password',
+          'dashboard',
         ];
         if (validPages.includes(pagePart as PageId)) {
           setCurrentPage(pagePart as PageId);
@@ -64,19 +70,35 @@ export default function App() {
     return () => window.clearTimeout(t);
   }, []);
 
+  // Resume an interrupted checkout after the user logs in / signs up.
+  useEffect(() => {
+    const pending = getPendingCheckout();
+    if (pending && purchaseCourses === null && currentUser()) {
+      clearPendingCheckout();
+      setPurchaseCourses(pending.courses);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
   const stopLoading = () => {
     window.clearTimeout(loaderTimer.current);
     loaderTimer.current = window.setTimeout(() => setIsPageLoading(false), 600);
   };
 
   const handleNavigate = (page: PageId, target?: string) => {
+    setIsCartOpen(false);
     setCurrentPage(page);
     setTargetId(target);
     const newHash = target ? `#${page}/${target}` : `#${page}`;
     window.location.hash = newHash;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setIsPageLoading(true);
-    stopLoading();
+    if (page === 'login' || page === 'signup' || page === 'forgot-password') {
+      window.clearTimeout(loaderTimer.current);
+      setIsPageLoading(false);
+    } else {
+      setIsPageLoading(true);
+      stopLoading();
+    }
   };
 
   const handleOpenEnrollment = (courseTitle?: string) => {
@@ -90,12 +112,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-[#F15A29]/20 selection:text-[#F15A29]">
-      {/* Global Header */}
-      <Header
-        currentPage={currentPage}
-        onNavigate={handleNavigate}
-        onOpenPurchase={handleOpenPurchase}
-      />
+      {/* Global Header — hidden on the private dashboard */}
+      {currentPage !== 'dashboard' && (
+        <Header
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+          onCartOpenChange={setIsCartOpen}
+        />
+      )}
 
       {/* Main Page Area */}
       <main className="flex-1">
@@ -111,6 +135,7 @@ export default function App() {
               <HomePage
                 onNavigate={handleNavigate}
                 onOpenEnrollment={handleOpenEnrollment}
+                onOpenPurchase={handleOpenPurchase}
                 targetId={targetId}
               />
             )}
@@ -141,12 +166,19 @@ export default function App() {
             {currentPage === 'forgot-password' && (
               <ForgotPasswordPage onNavigate={handleNavigate} />
             )}
+            {currentPage === 'dashboard' && (
+              <DashboardPage
+                onNavigate={handleNavigate}
+                onOpenPurchase={handleOpenPurchase}
+                onOpenCart={() => setIsCartOpen(true)}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </main>
 
-      {/* Global Footer */}
-      <Footer onNavigate={handleNavigate} />
+      {/* Global Footer — hidden on the private dashboard */}
+      {currentPage !== 'dashboard' && <Footer onNavigate={handleNavigate} />}
 
       {/* Interactive Enrolment Modal */}
       <EnrollmentModal
@@ -163,8 +195,16 @@ export default function App() {
         onNavigate={handleNavigate}
       />
 
-      {/* Floating WhatsApp Quick Action Button */}
-      <WhatsAppButton />
+      {/* Floating WhatsApp Quick Action Button — hidden on the private dashboard */}
+      {currentPage !== 'dashboard' && <WhatsAppButton />}
+
+      {/* Cart Side Panel — shared by the public header and the dashboard */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        onNavigate={handleNavigate}
+        onOpenPurchase={handleOpenPurchase}
+      />
 
       {/* Book-opening page loader (boot + navigation) */}
       <AnimatePresence>{isPageLoading && <PageLoader />}</AnimatePresence>

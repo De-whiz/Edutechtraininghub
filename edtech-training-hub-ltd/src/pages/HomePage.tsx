@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageId } from '../types';
 import { solutionsData } from '../data/solutionsData';
 import { homeAudienceGroups } from '../data/audienceData';
@@ -26,17 +26,28 @@ import {
   Zap,
   Video,
   Brain,
+  ShoppingCart,
+  Check,
 } from 'lucide-react';
+import {
+  addToCart,
+  removeFromCart,
+  inCart,
+  catalogIdForCourse,
+  CART_EVENT,
+} from '../utils/cart';
 
 interface HomePageProps {
   onNavigate: (page: PageId, targetId?: string) => void;
   onOpenEnrollment: (courseTitle?: string) => void;
+  onOpenPurchase: (courses: CourseItem[]) => void;
   targetId?: string;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenEnrollment,
+  onOpenPurchase,
   targetId,
 }) => {
   useEffect(() => {
@@ -49,6 +60,19 @@ export const HomePage: React.FC<HomePageProps> = ({
       }
     }
   }, [targetId]);
+  const masterclassId = catalogIdForCourse(featuredMasterclass);
+  const [masterclassInCart, setMasterclassInCart] = useState(() => inCart(masterclassId));
+
+  useEffect(() => {
+    const sync = () => setMasterclassInCart(inCart(masterclassId));
+    window.addEventListener(CART_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener(CART_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, [masterclassId]);
+
   const getSolutionIcon = (iconName: string) => {
     switch (iconName) {
       case 'Laptop':
@@ -96,7 +120,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="space-y-24 sm:space-y-32">
       {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-8 sm:pt-20 sm:pb-16 overflow-hidden">
+      <section className="relative pt-12 pb-8 sm:pt-20 sm:pb-8 overflow-hidden">
         {/* Background glow and architectural grid accents */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-slate-100/60 -z-10" />
         <div className="absolute top-10 right-1/4 w-96 h-96 bg-[#0F6B78]/5 rounded-full blur-3xl pointer-events-none -z-10" />
@@ -165,20 +189,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <span>View Our Courses</span>
                 </button>
               </div>
-
-              {/* Quick stats micro-strip */}
-              <div className="pt-4 border-t border-slate-200/80 grid grid-cols-3 gap-4 max-w-lg">
-                <div>
-                  <div className="text-xl font-black text-[#1E4E79]">5 Areas</div>
-                  <div className="text-xs text-slate-500">Connected EdTech Solutions</div>
-                </div>
-                <div>
-                  <div className="text-xl font-black text-[#0F6B78]">5 Weeks</div>
-                  <div className="text-xs text-slate-500">Flagship Masterclass</div>
-                <div className="text-xl font-black text-[#F15A29]">100%</div>
-                  <div className="text-xs text-slate-500">Practical & Hands-On</div>
-                </div>
-              </div>
             </Reveal>
 
             {/* Right Graphic / Educational Technology in Action */}
@@ -242,7 +252,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* 2. TRUST / POSITIONING SECTION */}
-      <section className="bg-white border-y border-slate-200 py-12">
+      <section className="bg-white border-y border-slate-200 py-8">
         <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1E4E79] tracking-tight">
             Education &bull; Technology &bull; Learning Design &bull; Practical Skills
@@ -540,17 +550,36 @@ export const HomePage: React.FC<HomePageProps> = ({
               {/* CTAs */}
               <div className="pt-4 flex flex-wrap items-center gap-4">
                 <button
-                  onClick={() => onOpenEnrollment(featuredMasterclass.title)}
-                  className="px-6 py-3 rounded-xl bg-[#F15A29] hover:bg-[#d9491d] text-white font-bold text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
+                  onClick={() => {
+                    if (masterclassInCart) {
+                      removeFromCart(masterclassId);
+                    } else {
+                      addToCart(masterclassId);
+                    }
+                  }}
+                  className={`px-6 py-3 rounded-xl font-bold text-xs shadow-sm transition-all active:scale-95 flex items-center gap-2 border ${
+                    masterclassInCart
+                      ? 'bg-[#0F6B78] border-[#0F6B78] text-white hover:bg-[#0b5560]'
+                      : 'bg-white border-slate-300 text-[#0F6B78] hover:border-[#0F6B78] hover:bg-[#0F6B78]/5'
+                  }`}
                 >
-                  <span>Enrol in Masterclass</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {masterclassInCart ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4" />
+                      Add to Cart
+                    </>
+                  )}
                 </button>
                 <button
-                  onClick={() => onNavigate('courses')}
-                  className="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs transition-colors"
+                  onClick={() => onOpenPurchase([featuredMasterclass])}
+                  className="px-6 py-3 rounded-xl bg-[#F15A29] hover:bg-[#d9491d] text-white font-bold text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
                 >
-                  <span>Explore Full Curriculum</span>
+                  <span>Buy</span>
                 </button>
               </div>
             </Reveal>
@@ -604,10 +633,11 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <div className="pt-6">
                 <button
-                  onClick={() => onOpenEnrollment(featuredMasterclass.title)}
-                  className="w-full py-3 px-4 rounded-xl bg-white text-[#1E4E79] hover:bg-slate-100 font-extrabold text-xs transition-colors text-center"
+                  onClick={() => onOpenPurchase([featuredMasterclass])}
+                  className="w-full py-3 px-4 rounded-xl bg-white text-[#1E4E79] hover:bg-slate-100 font-extrabold text-xs transition-colors text-center flex items-center justify-center gap-2"
                 >
-                  Secure Your Place &rarr;
+                  <ShoppingCart className="w-4 h-4" />
+                  Buy This Masterclass
                 </button>
               </div>
             </Reveal>

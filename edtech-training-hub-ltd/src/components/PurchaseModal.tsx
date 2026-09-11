@@ -3,6 +3,7 @@ import { PageId, CourseItem } from '../types';
 import { currentUser } from '../utils/auth';
 import { catalogIdForCourse, formatPrice, parsePrice, removeFromCart } from '../utils/cart';
 import { enrollCourses } from '../utils/purchases';
+import { setPendingCheckout } from '../utils/account';
 import {
   X,
   CreditCard,
@@ -44,9 +45,8 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setCardName(
-        user ? `${user.fname || ''} ${user.lname || ''}`.trim() : ''
-      );
+      const u = currentUser();
+      setCardName(u ? `${u.fname || ''} ${u.lname || ''}`.trim() : '');
       setCardNumber('');
       setExpiry('');
       setCvv('');
@@ -54,7 +54,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       setProcessing(false);
       setPaid(false);
     }
-  }, [isOpen, user]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -125,9 +125,10 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     }, 1200);
   };
 
-  const goDashboard = () => {
-    window.location.href = '../dashboard.html';
-  };
+const goDashboard = () => {
+  onClose();
+  onNavigate('dashboard');
+};
 
   const fieldClass =
     'w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0F6B78] focus:border-[#0F6B78] transition';
@@ -192,9 +193,15 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                 You need an account before you can purchase a course. Log in or
                 create one to continue.
               </p>
+              <p className="mt-3 text-xs text-[#0F6B78] font-semibold">
+                Your {courses.length} item{courses.length === 1 ? '' : 's'}{' '}
+                will stay saved in your cart while you log in.
+              </p>
               <div className="mt-6 space-y-3">
                 <button
+                  type="button"
                   onClick={() => {
+                    setPendingCheckout(courses, window.location.hash || '#home');
                     onClose();
                     onNavigate('login');
                   }}
@@ -204,7 +211,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                   <span>Log In</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
+                    setPendingCheckout(courses, window.location.hash || '#home');
                     onClose();
                     onNavigate('signup');
                   }}
@@ -213,6 +222,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                   Create an Account
                 </button>
                 <button
+                  type="button"
                   onClick={onClose}
                   className="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
                 >
