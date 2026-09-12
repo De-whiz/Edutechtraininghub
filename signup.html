@@ -25,10 +25,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 <body data-auth-page>
 
-  <header class="site-header site-header--solid">
+  <header class="site-header site-header--solid auth-header">
     <div class="container header__inner">
       <a href="index.html" class="brand" aria-label="EdTech Training Hub – Back to home">
         <img src="images/logo/Logo.jpeg" alt="EdTech Training Hub Ltd logo" class="brand__logo" width="40" height="40">
@@ -45,10 +46,10 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="header__actions">
-        <a href="login.html" class="login-link" aria-label="Login to student portal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span class="login-text">Login</span>
+        <a href="login.html" class="login-link auth-account-link" data-account-link aria-label="Open account">
+          <span data-account-label>Login</span>
         </a>
+        <a href="index.html#courses" class="cart-toggle" aria-label="View courses and cart">&#128722;</a>
       </div>
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
         <span></span>
@@ -59,10 +60,12 @@
   </header>
 
   <main>
-    <section class="section" style="padding-top:120px">
+    <section class="auth-section">
       <div class="container">
-        <div class="form-card reveal">
+        <div class="auth-layout reveal">
+          <div class="form-card auth-form-card">
           <div class="form-card__header">
+            <span class="auth-eyebrow">Join the learning community</span>
             <h1 class="form-card__title">Create Your Account</h1>
             <p class="form-card__sub">Sign up to enrol in courses and access the student portal.</p>
           </div>
@@ -113,12 +116,48 @@
           <div class="form-card__foot">
             <p>Already have an account? <a href="login.html">Log in here</a></p>
           </div>
+          </div>
+          <aside class="auth-visual">
+            <img src="images/hero-banner.jpg" alt="Educator exploring digital learning tools">
+            <div class="auth-visual__copy">
+              <span>Practical. Purposeful. Learner-focused.</span>
+              <h2>Start turning knowledge into meaningful opportunity.</h2>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
+    <div class="container footer__grid auth-footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="brand">
+          <img src="images/logo/Logo.jpeg" alt="EdTech Training Hub Ltd logo" class="footer__logo">
+          <span class="brand__text">
+            <span class="brand__name">EdTech Training Hub</span>
+            <span class="brand__tag">Ltd &bull; Education &bull; Technology &bull; Design</span>
+          </span>
+        </a>
+        <p>Empowering people to learn, teach, create and thrive in the digital age.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <nav class="footer__links" aria-label="Footer navigation">
+          <a href="index.html">Home</a>
+          <a href="courses.html">Courses</a>
+          <a href="services.html">Solutions</a>
+        </nav>
+      </div>
+      <div>
+        <h4>Account</h4>
+        <nav class="footer__links" aria-label="Account navigation">
+          <a href="login.html">Log in</a>
+          <a href="signup.html">Create account</a>
+          <a href="contact.html">Contact us</a>
+        </nav>
+      </div>
+    </div>
     <div class="footer__bottom">
       <div class="footer__bottom__inner">
         <span>&copy; 2026 EdTech Training Hub Ltd. All rights reserved.</span>
@@ -127,6 +166,7 @@
   </footer>
 
   <script src="js/auth.js"></script>
+  <script src="js/auth-header.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

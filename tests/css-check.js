@@ -1,5 +1,5 @@
 const fs = require("fs");
-const css = fs.readFileSync("css/style.css", "utf8") + "\n" + fs.readFileSync("css/dashboard.css", "utf8") + "\n" + fs.readFileSync("Admin/css/admin.css", "utf8");
+const css = fs.readFileSync("css/style.css", "utf8") + "\n" + fs.readFileSync("css/client.css", "utf8") + "\n" + fs.readFileSync("css/dashboard.css", "utf8") + "\n" + fs.readFileSync("css/auth.css", "utf8") + "\n" + fs.readFileSync("Admin/css/admin.css", "utf8");
 const o = (css.match(/\{/g) || []).length;
 const c = (css.match(/\}/g) || []).length;
 console.log("braces:", o, "/", c, o === c ? "BALANCED" : "BROKEN");

@@ -8,13 +8,13 @@
   /* ---------------- admin catalog merge (published admin courses) ---------------- */
 
   function toPublicCourse(c) {
-    var modules = c.modules || [];
+    var modules = Array.isArray(c.modules) ? c.modules : [];
     var lessonTotal = 0;
     var examTotal = 0;
     var videoTotal = 0;
     var titles = [];
     modules.forEach(function (m) {
-      var ls = m.lessons || [];
+      var ls = Array.isArray(m.lessons) ? m.lessons : [];
       if (m.title) titles.push(m.title);
       lessonTotal += ls.length;
       if (m.examEnabled && m.exam && (m.exam.questions || []).length) examTotal++;
@@ -54,7 +54,6 @@
       title: c.title,
       tagline: c.tagline || "",
       desc: c.desc || "",
-      image: c.image || "images/hero.jpg",
       price: c.price || "\u20a60",
       priceNum: Number(c.priceNum) || 0,
       duration: c.duration || "Self-Paced",
@@ -72,7 +71,7 @@
   function isLegacySeed(c) {
     var text = String(c.title || "") + " " + String(c.tagline || "") + " " + String(c.desc || "");
     if (text.toLowerCase().indexOf("orientation to your learning journey") !== -1) return true;
-    var modules = c.modules || [];
+    var modules = Array.isArray(c.modules) ? c.modules : [];
     for (var i = 0; i < modules.length; i++) {
       var mid = modules[i] && modules[i].id;
       if (mid === "dm1" || mid === "dm2") return true;
@@ -89,7 +88,11 @@
       if (!c || c.published === false) return;
       if (!String(c.title || "").trim()) return;
       if (isLegacySeed(c)) return;
-      out.push(toPublicCourse(c));
+      try {
+        out.push(toPublicCourse(c));
+      } catch (e) {
+        if (window.console) window.console.warn("Skipping malformed course:", c && c.id, e);
+      }
     });
     return out;
   }
@@ -120,8 +123,15 @@
       progressBar.style.width = pct + "%";
     }
 
+    if (toTop) {
+      toTop.classList.toggle("is-visible", window.scrollY > 500);
+    }
+  }
+
 var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
   var CARD_EYE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+  var CARD_CART_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>';
 
   function escHTML(str) {
     return String(str == null ? "" : str)
@@ -155,7 +165,6 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
       return (
         '<article class="course-card" data-cat="' + escHTML(course.cat) + '" data-course-id="' + course.id + '">' +
         '<div class="course-card__thumb">' +
-        '<img src="' + escHTML(course.image) + '" alt="' + escHTML(course.title) + '">' +
         (course.featured ? '<span class="course-card__tag course-card__tag--featured">Featured</span>' : "") +
         "</div>" +
         '<div class="course-card__body">' +
@@ -167,14 +176,15 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
         "</div>" +
         '<div class="course-card__foot">' +
         '<span class="course-card__price">From ' + escHTML(productFrom(course)) + "<small>digital product</small></span>" +
-        '<button class="btn btn--primary course-card__getaccess" data-get-access="' + course.id + '">Get Access</button>' +
-        "</div></div></article>"
+        '<div class="course-card__buttons">' +
+        '<button class="course-card__cart" data-course-id="' + course.id + '" aria-label="Add to cart">' + CARD_CART_SVG + "</button>" +
+        '<button class="course-card__enroll course-card__getaccess" data-get-access="' + course.id + '">Get Access</button>' +
+        "</div></div></div></article>"
       );
     }
     return (
       '<article class="course-card" data-cat="' + escHTML(course.cat) + '" data-course-id="' + course.id + '">' +
       '<div class="course-card__thumb">' +
-      '<img src="' + escHTML(course.image) + '" alt="' + escHTML(course.title) + '">' +
       (course.featured ? '<span class="course-card__tag course-card__tag--featured">Featured</span>' : "") +
       "</div>" +
       '<div class="course-card__body">' +
@@ -187,8 +197,8 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
       '<div class="course-card__foot">' +
       '<span class="course-card__price">' + escHTML(course.price) + "<small>per participant</small></span>" +
       '<div class="course-card__buttons">' +
-      '<button class="btn btn--primary course-card__enroll" data-course-id="' + course.id + '">Enroll</button>' +
-      '<button class="btn btn--outline course-card__cart" data-course-id="' + course.id + '">Add to Cart</button>' +
+      '<button class="course-card__enroll" data-course-id="' + course.id + '">Enroll</button>' +
+      '<button class="course-card__cart" data-course-id="' + course.id + '" aria-label="Add to cart">' + CARD_CART_SVG + "</button>" +
       "</div></div></div></article>"
     );
   }
@@ -225,11 +235,6 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
       "<p>Courses created by our team will appear here as soon as they are published.</p>" +
       "</div>"
     );
-  }
-
-  if (toTop) {
-      toTop.classList.toggle("is-visible", window.scrollY > 500);
-    }
   }
 
   function initHeader() {
@@ -291,55 +296,70 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
   }
 
   function initTestimonials() {
-    var carousel = document.querySelector(".testimonials__carousel");
-    var track = document.querySelector(".testimonials__track");
-    if (!carousel || !track) return;
+    var grid = document.querySelector(".tst-grid");
+    var chips = document.querySelectorAll(".tst-chip[data-filter]");
+    if (!grid) return;
 
-    var cards = track.querySelectorAll(".testimonial-card");
-    var dotsWrap = document.querySelector(".testimonials__dots");
-    var prevBtn = carousel.querySelector(".testimonials__arrow--prev");
-    var nextBtn = carousel.querySelector(".testimonials__arrow--next");
-    var total = cards.length;
-    var current = 0;
-    var autoTimer = null;
+    function tstCardHTML(t, initials, tone) {
+      var text = String(t.text || t.testimonial || "").trim();
+      if (!text) return "";
+      var name = String(t.name || "EdTech Learner").trim();
+      var role = String(t.role || t.category || "").trim();
+      var cat = String(t.cat || t.category || "").trim();
+      if (!initials) {
+        var parts = name.split(/\s+/);
+        initials = ((parts[0] || "")[0] || "") + ((parts[1] || "")[0] || "");
+        if (!initials) initials = "ET";
+      }
+      initials = initials.toUpperCase();
+      var toneCls = tone ? " tst-card__avatar--orange" : "";
+      return (
+        '<article class="tst-card' + (cat ? '" data-cat="' + escHTML(cat) : "") + '">' +
+        '<span class="tst-card__quote"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.6 5.2c-3.6 1.7-5.8 4.6-5.8 8.4 0 3.1 2 5.2 4.6 5.2 2.3 0 4-1.7 4-4 0-2.2-1.6-3.8-3.7-3.8-.4 0-.9.1-1 .1.3-2 2-3.7 4-4.5l-2.1-1.4Zm10 0c-3.5 1.7-5.7 4.6-5.7 8.4 0 3.1 2 5.2 4.6 5.2 2.3 0 4-1.7 4-4 0-2.2-1.6-3.8-3.7-3.8-.4 0-.9.1-1 .1.3-2 2-3.7 4-4.5L19.6 5.2Z"/></svg></span>' +
+        (cat ? '<span class="tst-card__cat">' + escHTML(cat) + "</span>" : "") +
+        '<p class="tst-card__text">' + escHTML(text) + "</p>" +
+        '<div class="tst-card__foot">' +
+        '<span class="tst-card__avatar' + toneCls + '">' + escHTML(initials) + "</span>" +
+        '<span><span class="tst-card__name">' + escHTML(name) + "</span>" +
+        (role ? '<span class="tst-card__role">' + escHTML(role) + "</span>" : "") +
+        "</span></div></article>"
+      );
+    }
 
-    if (!total || !dotsWrap) return;
+    var stored = [];
+    try {
+      var raw = localStorage.getItem("eth_user_testimonials");
+      var parsed = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(parsed)) stored = parsed;
+    } catch (e) {
+      stored = [];
+    }
 
-    cards.forEach(function (_, i) {
-      var dot = document.createElement("button");
-      dot.className = "testimonials__dot" + (i === 0 ? " is-active" : "");
-      dot.setAttribute("role", "tab");
-      dot.setAttribute("aria-label", "Testimonial " + (i + 1));
-      dot.addEventListener("click", function () { goTo(i); });
-      dotsWrap.appendChild(dot);
+    stored.forEach(function (t) {
+      var html = tstCardHTML(t);
+      if (html) grid.insertAdjacentHTML("beforeend", html);
     });
 
-    var dots = dotsWrap.querySelectorAll(".testimonials__dot");
+    var cards = grid.querySelectorAll(".tst-card[data-cat]");
 
-    function goTo(index) {
-      current = ((index % total) + total) % total;
-      cards.forEach(function (c, i) {
-        c.classList.toggle("is-active", i === current);
+    function apply() {
+      var active = document.querySelector(".tst-chip.is-active");
+      var filter = active ? active.getAttribute("data-filter") : "all";
+      cards.forEach(function (c) {
+        var cats = (c.getAttribute("data-cat") || "").split(" ");
+        c.classList.toggle("is-hidden", !(filter === "all" || cats.indexOf(filter) !== -1));
       });
-      var cardW = cards[0].offsetWidth + 20;
-      var centerOffset = (track.parentElement.offsetWidth - cardW) / 2;
-      track.style.transform = "translateX(" + (centerOffset - current * cardW) + "px)";
-      dots.forEach(function (d, i) { d.classList.toggle("is-active", i === current); });
-      resetTimer();
     }
 
-    function next() { goTo(current + 1); }
-    function prev() { goTo(current - 1); }
+    chips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        chips.forEach(function (c) { c.classList.remove("is-active"); });
+        chip.classList.add("is-active");
+        apply();
+      });
+    });
 
-    function resetTimer() {
-      clearInterval(autoTimer);
-      autoTimer = setInterval(next, 5000);
-    }
-
-    if (prevBtn) prevBtn.addEventListener("click", prev);
-    if (nextBtn) nextBtn.addEventListener("click", next);
-
-    goTo(0);
+    apply();
   }
 
   function initCounters() {
@@ -476,8 +496,6 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
       }
       if (!course) return;
 
-      modalThumb.src = course.image;
-      modalThumb.alt = course.title;
       modalTitle.textContent = course.title;
       modalTagline.textContent = course.tagline || "";
       modalTag.textContent = course.featured ? "Featured Programme" : course.level;
@@ -677,7 +695,7 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
   }
 
   function initEnrollButtons() {
-    var number = "234803383339";
+    var number = "2348063383339";
     var buttons = document.querySelectorAll("[data-enroll]");
     buttons.forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -685,6 +703,33 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
         var text = "Hello EdTech Training Hub! I'd like to enroll in *" + course + "*.";
         window.open("https://wa.me/" + number + "?text=" + encodeURIComponent(text), "_blank");
       });
+    });
+  }
+
+  function initWaFab() {
+    var fab = document.getElementById("waFab");
+    if (!fab) return;
+    var toggle = fab.querySelector(".wa-fab__toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = fab.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+
+    document.addEventListener("click", function (e) {
+      if (fab.classList.contains("open") && !fab.contains(e.target)) {
+        fab.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && fab.classList.contains("open")) {
+        fab.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
     });
   }
 
@@ -748,6 +793,7 @@ var CARD_CLOCK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height=
   bindGetAccess();
   initEnrollButtons();
   initContactForm();
+  initWaFab();
 
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();

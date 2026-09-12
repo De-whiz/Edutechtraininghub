@@ -181,5 +181,19 @@ t("import wrong shape rejected", A.importAll('{"foo":1}').ok === false && /missi
 
 t("clear admin data keeps account", A.clearAdminData().ok === true && A.getAccount().username === A.DEFAULT_USERNAME);
 
+const seed = JSON.parse(fs.readFileSync("Admin/seed-data.json", "utf8"));
+t("seed-data.json parses to 13 courses", Array.isArray(seed) && seed.length === 13);
+const s1 = A.importSeedCatalog(seed);
+t("seed import ok", s1.ok === true && s1.imported === 13);
+const seededList = A.listCatalog();
+t("seed import adds masterclass", seededList.some((c) => c.title === "Digital Skills & Online Teaching Masterclass"));
+t("seed ids all >= 100", seededList.every((c) => c.id >= 100));
+const master = seededList.find((c) => c.title === "Digital Skills & Online Teaching Masterclass");
+t("masterclass stays featured", master && master.featured === true);
+t("seed modules preserved", master && A.summaryOf(master).modules === 4 && A.summaryOf(master).lessons === 4);
+const s2 = A.importSeedCatalog(seed);
+t("second seed import skips all", s2.ok === true && s2.imported === 0 && s2.skipped === 13);
+t("seed import wrong shape rejected", A.importSeedCatalog("nope").ok === false);
+
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

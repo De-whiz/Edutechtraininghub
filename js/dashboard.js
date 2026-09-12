@@ -266,14 +266,13 @@
       '<div class="pay-body" id="payBody">' +
       (courses.length === 1
         ? '<div class="pay-course">' +
-          '<img src="' + courses[0].image + '" alt="" class="pay-course__thumb">' +
           '<div class="pay-course__info"><h3>' + esc(courses[0].title) + "</h3>" +
           '<p class="pay-course__desc">' + esc(courses[0].desc) + "</p>" +
           '<div class="course-tile__meta"><span>' + ICONS.clock + " " + esc(courses[0].duration) + "</span><span>" + esc(courses[0].level) + "</span></div></div>" +
           '<strong class="pay-course__price">' + esc(courses[0].price) + "</strong></div>"
         : '<div class="line-items">' +
           courses.map((c) => (
-            '<div class="line-item"><img src="' + c.image + '" alt="">' +
+            '<div class="line-item">' +
             '<span class="line-item__name">' + esc(c.title) + "</span>" +
             '<span class="line-item__price">' + esc(c.price) + "</span></div>"
           )).join("") +
@@ -404,7 +403,6 @@
             const c = getCourse(id);
             return (
               '<div class="cart-row">' +
-              '<img src="' + c.image + '" alt="" class="cart-row__thumb">' +
               '<div class="cart-row__info"><span class="cart-row__title">' + esc(c.title) + "</span>" +
               '<span class="cart-row__price">' + esc(c.price) + "</span></div>" +
               '<button class="cart-row__remove" data-cart-remove="' + id + '" aria-label="Remove ' + esc(c.title) + '">' + ICONS.x + "</button>" +
@@ -926,7 +924,6 @@
       const lesson = cont.lessons[li];
       heroBody =
         '<div class="mini-course">' +
-        '<img src="' + cont.course.image + '" alt="" class="mini-course__thumb">' +
         '<div class="mini-course__body">' +
         '<span class="mini-course__kicker">Continue Learning</span>' +
         '<h3 class="mini-course__title">' + esc(cont.course.title) + "</h3>" +
@@ -971,7 +968,6 @@
 
     const snapRows = states.slice(0, 4).map((st) => (
       '<button class="snap-item" data-open-course="' + st.course.id + '">' +
-      '<img src="' + st.course.image + '" alt="">' +
       '<span class="snap-item__info"><span class="snap-item__title">' + esc(st.course.title) + "</span>" +
       '<span class="snap-item__bar' + (st.completedAt ? " is-done" : "") + '"><i style="width:' + st.percent + '%"></i></span></span>' +
       '<span class="snap-item__pct">' + st.percent + "%</span>" +
@@ -1038,8 +1034,7 @@
 
     return (
       '<article class="course-tile" data-open-course="' + st.course.id + '">' +
-      '<div class="course-tile__thumb-wrap">' +
-      '<img src="' + st.course.image + '" alt="" class="course-tile__thumb">' + status + "</div>" +
+      '<div class="course-tile__thumb-wrap">' + status + "</div>" +
       '<div class="course-tile__body">' +
       '<h3 class="course-tile__title">' + esc(st.course.title) + "</h3>" +
       '<div class="course-tile__meta"><span>' + ICONS.clock + " " + esc(st.course.duration) + "</span><span>" + ICONS.book + " " + st.total + " classes</span></div>" +
@@ -1085,7 +1080,6 @@
         const applied = st.applied;
         return (
           '<article class="course-tile">' +
-          '<div class="course-tile__thumb-wrap"><img src="' + course.image + '" alt="" class="course-tile__thumb"></div>' +
           '<div class="course-tile__body">' +
           '<h3 class="course-tile__title">' + esc(course.title) + "</h3>" +
           '<div class="course-tile__meta"><span>' + ICONS.clock + " " + esc(course.duration) + "</span><span>" + esc(course.format || "Digital Product") + "</span></div>" +
@@ -1103,7 +1097,6 @@
       const inCart = !enrolledAlready && ETH.cart().indexOf(course.id) !== -1;
       return (
         '<article class="course-tile">' +
-        '<div class="course-tile__thumb-wrap"><img src="' + course.image + '" alt="" class="course-tile__thumb"></div>' +
         '<div class="course-tile__body">' +
         '<h3 class="course-tile__title">' + esc(course.title) + "</h3>" +
         '<div class="course-tile__meta"><span>' + ICONS.clock + " " + esc(course.duration) + "</span><span>" + esc(course.level) + "</span></div>" +
