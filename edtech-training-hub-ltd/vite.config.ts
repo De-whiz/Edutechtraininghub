@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -6,6 +7,18 @@ import { defineConfig, type Plugin } from 'vite';
 
 const repoRoot = path.resolve(__dirname, '..');
 const appRoot = path.resolve(__dirname);
+
+function copyLegacySiteAssets(): Plugin {
+  return {
+    name: 'copy-legacy-site-assets',
+    closeBundle() {
+      const outputDir = path.resolve(__dirname, 'dist');
+      fs.cpSync(path.join(appRoot, 'Admin'), path.join(outputDir, 'Admin'), { recursive: true });
+      fs.cpSync(path.join(repoRoot, 'js'), path.join(outputDir, 'js'), { recursive: true });
+      fs.cpSync(path.join(repoRoot, 'images'), path.join(outputDir, 'images'), { recursive: true });
+    },
+  };
+}
 
 function serveRepoRoot(): Plugin {
   const app = express();
@@ -40,7 +53,7 @@ function serveRepoRoot(): Plugin {
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), serveRepoRoot()],
+    plugins: [react(), tailwindcss(), serveRepoRoot(), copyLegacySiteAssets()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
