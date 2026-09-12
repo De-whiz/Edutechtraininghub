@@ -5,6 +5,7 @@ import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
 
 const repoRoot = path.resolve(__dirname, '..');
+const appRoot = path.resolve(__dirname);
 
 function serveRepoRoot(): Plugin {
   const app = express();
@@ -23,7 +24,7 @@ function serveRepoRoot(): Plugin {
     }
     next();
   });
-  app.use('/Admin', express.static(path.join(repoRoot, 'Admin'), { index: ['index.html'], dotfiles: 'ignore' }));
+  app.use('/Admin', express.static(path.join(appRoot, 'Admin'), { index: ['index.html'], dotfiles: 'ignore' }));
   app.use(['/js', '/images'], express.static(repoRoot, { index: ['index.html'], dotfiles: 'ignore' }));
 
   return {
