@@ -308,6 +308,17 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Contact
             </button>
+
+            <button
+              onClick={() => handleNav('blog')}
+              className={`px-3.5 py-2 rounded-lg transition-colors ${
+                currentPage === 'blog'
+                  ? 'text-[#F15A29] font-bold bg-[#F15A29]/10'
+                  : 'hover:text-[#1E4E79] hover:bg-slate-100/80'
+              }`}
+            >
+              Blog
+            </button>
           </nav>
 
           {/* Account and cart actions */}
@@ -510,6 +521,16 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               Contact Us
+            </button>
+            <button
+              onClick={() => handleNav('blog')}
+              className={`text-left px-3 py-2.5 rounded-lg ${
+                currentPage === 'blog'
+                  ? 'bg-[#F15A29]/10 text-[#F15A29] font-bold'
+                  : 'text-slate-800 hover:bg-slate-100'
+              }`}
+            >
+              Blog
             </button>
           </div>
 

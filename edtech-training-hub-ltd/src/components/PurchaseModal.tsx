@@ -134,12 +134,14 @@ const goDashboard = () => {
     'w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0F6B78] focus:border-[#0F6B78] transition';
 
   return (
-    <div className="fixed inset-0 z-[80] overflow-y-auto">
+    <>
       <div
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+        className="fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-sm"
         onClick={processing ? undefined : onClose}
+        aria-hidden="true"
       />
-      <div className="relative min-h-full flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[81] overflow-y-auto">
+        <div className="min-h-full flex items-center justify-center p-4">
         <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
           {paid ? (
             <div className="p-8 sm:p-10 text-center">
@@ -379,5 +381,6 @@ const goDashboard = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PageId } from '../types';
+import { PageId, CourseItem } from '../types';
 import { solutionsData } from '../data/solutionsData';
 import { homeAudienceGroups } from '../data/audienceData';
 import { featuredMasterclass } from '../data/coursesData';

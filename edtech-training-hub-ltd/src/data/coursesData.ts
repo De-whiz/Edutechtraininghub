@@ -34,6 +34,12 @@ export const featuredMasterclass: CourseItem = {
     'A knowledge-based offer',
     'A simple launch plan',
   ],
+  instructor: {
+    name: 'Blessing Otuonye',
+    title: 'Lead EdTech Facilitator & Digital Learning Strategist',
+    bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+    initials: 'BO',
+  },
 };
 
 export const coursesCatalog: CourseItem[] = [
@@ -47,13 +53,19 @@ export const coursesCatalog: CourseItem[] = [
     format: 'Cohort-based & Practical Assignments',
     price: '₦35,000',
     description:
-      'Learn the foundations of learning science, ADDIE, Bloom’s taxonomy, and how to structure engaging learning pathways that produce measurable outcomes.',
+      'Learn the foundations of learning science, ADDIE, Bloom\'s taxonomy, and how to structure engaging learning pathways that produce measurable outcomes.',
     whatYouLearn: [
       'Foundations of learning theory and adult learning principles',
       'Conducting practical learner needs assessments',
-      'Writing measurable learning outcomes with Bloom’s Revised Taxonomy',
+      'Writing measurable learning outcomes with Bloom\'s Revised Taxonomy',
       'Structuring course modules, lesson plans, and formative evaluations',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Learning Design Specialist',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'ai-educators',
@@ -71,6 +83,12 @@ export const coursesCatalog: CourseItem[] = [
       'AI tools for differentiated learning and student feedback',
       'Academic integrity, ethics, and AI policy guidelines',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'AI & Education Technologist',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'lms-course-creators',
@@ -88,6 +106,12 @@ export const coursesCatalog: CourseItem[] = [
       'Integrating payment gateways, automated certificates, and quizzes',
       'Student tracking, analytics, and retention workflows',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'LMS Implementation Consultant',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'digital-skills-teachers',
@@ -105,6 +129,12 @@ export const coursesCatalog: CourseItem[] = [
       'Designing engaging multimedia learning artifacts',
       'Digital gradebooks, feedback forms, and parent communication',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Digital Literacy Trainer',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'elearning-content-dev',
@@ -122,6 +152,12 @@ export const coursesCatalog: CourseItem[] = [
       'Designing engaging voiceovers, animations, and visual diagrams',
       'Exporting, testing, and troubleshooting SCORM-compliant modules',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Multimedia Learning Designer',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'online-tutoring-support',
@@ -139,6 +175,12 @@ export const coursesCatalog: CourseItem[] = [
       'Session structuring, pacing, and interactive question techniques',
       'Communicating progress with parents and building a tutoring client base',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Academic Coach & Online Tutor',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'digital-product-creation',
@@ -156,6 +198,12 @@ export const coursesCatalog: CourseItem[] = [
       'Pricing models, packaging tiers, and product positioning',
       'Simple landing page setup and frictionless digital delivery',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Digital Product Strategist',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'advanced-instructional-design',
@@ -169,10 +217,16 @@ export const coursesCatalog: CourseItem[] = [
       'Deepen your learning science mastery with scenario-based learning, cognitive load optimization, competency-based curricula, and enterprise evaluation.',
     whatYouLearn: [
       'Complex scenario-based and game-informed instructional frameworks',
-      'Applying Sweller’s Cognitive Load Theory to complex content',
-      'Kirkpatrick’s 4 Levels of Training Evaluation & business ROI metrics',
+      'Applying Sweller\'s Cognitive Load Theory to complex content',
+      'Kirkpatrick\'s 4 Levels of Training Evaluation & business ROI metrics',
       'Enterprise curriculum mapping and stakeholder management',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Professor of Educational Technology',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'ai-powered-content-creation',
@@ -190,6 +244,12 @@ export const coursesCatalog: CourseItem[] = [
       'Automated transcript-to-summary learning workflows',
       'Quality assurance methods to prevent AI inaccuracies',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Content Innovation Lead',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'digital-productivity-professionals',
@@ -207,6 +267,12 @@ export const coursesCatalog: CourseItem[] = [
       'Task batching, calendar defense, and asynchronous team collaboration',
       'Cloud storage hygiene and instant file retrieval structures',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Productivity & Efficiency Coach',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'video-course-production',
@@ -224,6 +290,12 @@ export const coursesCatalog: CourseItem[] = [
       'Screen recording and lightweight video editing workflows',
       'Exporting optimized video formats for seamless web streaming',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Video Producer & Media Trainer',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
   {
     id: 'lms-administration-mgmt',
@@ -241,6 +313,12 @@ export const coursesCatalog: CourseItem[] = [
       'LMS integration with Zoom, Google Meet, and payment gateways',
       'Data reporting, learner completion analytics, and compliance audits',
     ],
+    instructor: {
+      name: 'Blessing Otuonye',
+      title: 'Senior LMS Administrator',
+      bio: 'Blessing Otuonye is a seasoned EdTech trainer and learning designer with over a decade of experience helping educators, tutors, course creators and institutions across Nigeria build practical digital teaching skills. Blessing leads facilitation and programme design at EdTech Training Hub with a hands-on, results-focused teaching style.',
+      initials: 'BO',
+    },
   },
 ];
 

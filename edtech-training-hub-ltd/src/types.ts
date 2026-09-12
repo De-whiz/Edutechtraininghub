@@ -8,7 +8,9 @@ export type PageId =
   | 'login'
   | 'signup'
   | 'forgot-password'
-  | 'dashboard';
+  | 'dashboard'
+  | 'blog'
+  | 'terms';
 
 export interface SolutionItem {
   id: string;
@@ -36,6 +38,13 @@ export interface TestimonialItem {
   category?: string;
 }
 
+export interface InstructorInfo {
+  name: string;
+  title: string;
+  bio: string;
+  initials: string;
+}
+
 export interface CourseItem {
   id: string;
   title: string;
@@ -49,6 +58,29 @@ export interface CourseItem {
   whoIsItFor?: string[];
   whatYouLearn: string[];
   featured?: boolean;
+  instructor?: InstructorInfo;
+}
+
+export interface ReviewItem {
+  id: string;
+  userId: string;
+  courseId: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: number;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  author: string;
+  date: string;
+  readTime: string;
+  tags: string[];
 }
 
 export interface AudienceItem {

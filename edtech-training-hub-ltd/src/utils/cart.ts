@@ -1,5 +1,5 @@
 import { CourseItem } from '../types';
-import { coursesCatalog } from '../data/coursesData';
+import { allCatalog } from './catalog';
 
 const CART_KEY = 'eth_cart';
 
@@ -48,9 +48,7 @@ export function catalogIdForCourse(course: CourseItem): number {
 export function courseFromCatalogId(id: number): CourseItem | null {
   const num = Number(id);
   if (isNaN(num)) return null;
-  const course =
-    coursesCatalog.find((c) => catalogIdForCourse(c) === num) || null;
-  return course;
+  return allCatalog().find((c) => catalogIdForCourse(c) === num) || null;
 }
 
 export function getCart(): number[] {

@@ -136,6 +136,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   Contact
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('blog')}
+                  className="hover:text-white transition-colors"
+                >
+                  Blog
+                </button>
+              </li>
             </ul>
           </Reveal>
 
@@ -272,7 +280,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>&copy; {new Date().getFullYear()} EdTech Training Hub. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <button
+              onClick={() => onNavigate('terms')}
+              className="hover:text-white transition-colors"
+            >
+              Terms &amp; Conditions
+            </button>
+            <span>&bull;</span>
             <span className="text-slate-400">Technology Practical for Learning</span>
             <span>&bull;</span>
             <span>Abuja, Nigeria</span>

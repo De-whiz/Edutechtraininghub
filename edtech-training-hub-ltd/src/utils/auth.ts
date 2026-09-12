@@ -215,3 +215,65 @@ export function maskEmail(email: string) {
   const visible = (parts[0] || '').slice(0, 2);
   return visible + '\u2022\u2022\u2022\u2022@' + (parts[1] || '');
 }
+
+export function changePassword(
+  userId: string,
+  currentPw: string,
+  newPw: string,
+  confirmPw: string
+): Result {
+  if (!currentPw) {
+    return { ok: false, error: 'Please enter your current password.' };
+  }
+  if ((newPw || '').length < 8) {
+    return { ok: false, error: 'New password must be at least 8 characters long.' };
+  }
+  if (newPw !== confirmPw) {
+    return { ok: false, error: 'New passwords do not match.' };
+  }
+  const list = users();
+  const user = list.find((u) => u.id === userId);
+  if (!user) {
+    return { ok: false, error: 'Account not found.' };
+  }
+  if (user.password !== currentPw) {
+    return { ok: false, error: 'Current password is incorrect.' };
+  }
+  user.password = newPw;
+  saveUsers(list);
+  return { ok: true };
+}
+
+const AVATAR_KEY = 'eth_avatars';
+
+export function updateAvatar(userId: string, dataUrl: string) {
+  try {
+    const raw = localStorage.getItem(AVATAR_KEY);
+    const map: Record<string, string> = raw ? JSON.parse(raw) : {};
+    map[userId] = dataUrl;
+    localStorage.setItem(AVATAR_KEY, JSON.stringify(map));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function getAvatar(userId: string): string | null {
+  try {
+    const raw = localStorage.getItem(AVATAR_KEY);
+    const map: Record<string, string> = raw ? JSON.parse(raw) : {};
+    return map[userId] || null;
+  } catch {
+    return null;
+  }
+}
+
+export function removeAvatar(userId: string) {
+  try {
+    const raw = localStorage.getItem(AVATAR_KEY);
+    const map: Record<string, string> = raw ? JSON.parse(raw) : {};
+    delete map[userId];
+    localStorage.setItem(AVATAR_KEY, JSON.stringify(map));
+  } catch {
+    /* ignore */
+  }
+}

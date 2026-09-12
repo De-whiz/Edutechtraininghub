@@ -18,6 +18,8 @@ import { PageLoader } from './components/PageLoader';
 import { WhatsAppButton } from './components/WhatsAppButton';
 import { CartDrawer } from './components/CartDrawer';
 import { DashboardPage } from './pages/DashboardPage';
+import { BlogPage } from './pages/BlogPage';
+import { TermsPage } from './pages/TermsPage';
 import { currentUser } from './utils/auth';
 import { clearPendingCheckout, getPendingCheckout } from './utils/account';
 
@@ -52,6 +54,8 @@ export default function App() {
           'signup',
           'forgot-password',
           'dashboard',
+          'blog',
+          'terms',
         ];
         if (validPages.includes(pagePart as PageId)) {
           setCurrentPage(pagePart as PageId);
@@ -173,6 +177,8 @@ export default function App() {
                 onOpenCart={() => setIsCartOpen(true)}
               />
             )}
+            {currentPage === 'blog' && <BlogPage onNavigate={handleNavigate} />}
+            {currentPage === 'terms' && <TermsPage onNavigate={handleNavigate} />}
           </motion.div>
         </AnimatePresence>
       </main>
