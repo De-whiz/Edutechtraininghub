@@ -1,0 +1,251 @@
+[
+  {
+    "id": 101,
+    "title": "Digital Skills & Online Teaching Masterclass",
+    "tagline": "From digital confidence to a professional online teaching offer in 5 weeks.",
+    "desc": "A 5-week practical programme designed to take participants from basic digital confidence to online teaching, curriculum and course design, digital content creation, and professional positioning. Participants learn how to use essential digital and AI tools, teach effectively online, design a curriculum or course, create digital learning resources, and develop a professional portfolio and knowledge-based offer.",
+    "price": "\u20a630,000",
+    "priceNum": 30000,
+    "duration": "5 Weeks",
+    "level": "All Levels",
+    "format": "Self-Paced Lessons + Weekly Live Coaching & Q&A",
+    "cat": "teaching",
+    "featured": true,
+    "published": true,
+    "image": "images/hero-banner.jpg",
+    "modules": [
+      { "id": "s101m1", "title": "Essential Digital Skills", "lessons": [ { "id": "s101l1", "title": "Getting comfortable with the digital toolbox", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Build the everyday digital confidence every modern educator and trainer needs, from files and folders to collaboration and communication tools."] } ] },
+      { "id": "s101m2", "title": "Basic AI Skills", "lessons": [ { "id": "s101l2", "title": "Practical AI for educators", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Learn the essential AI tools and prompt skills that save hours of preparation time while keeping your teaching original and responsible."] } ] },
+      { "id": "s101m3", "title": "An Online Teaching Sample", "lessons": [ { "id": "s101l3", "title": "Deliver a short online teaching sample", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Plan, record and deliver a short online teaching sample that demonstrates your ability to teach clearly and engagingly online."] } ] },
+      { "id": "s101m4", "title": "Curriculum & Course Design", "lessons": [ { "id": "s101l4", "title": "Design a curriculum, course or training outline", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Structure your knowledge into a curriculum/course/training outline with clear learning outcomes and a simple launch plan."] } ] }
+    ]
+  },
+  {
+    "id": 102,
+    "title": "Instructional Design Fundamentals",
+    "tagline": "Foundations of learning science and outcome-first course design.",
+    "desc": "Learn the foundations of learning science, ADDIE, Bloom's taxonomy, and how to structure engaging learning pathways that produce measurable outcomes.",
+    "price": "\u20a635,000",
+    "priceNum": 35000,
+    "duration": "4 Weeks",
+    "level": "Beginner",
+    "format": "Cohort-based & Practical Assignments",
+    "cat": "design",
+    "published": true,
+    "modules": [
+      { "id": "s102m1", "title": "Learning Theory & Adult Learning Principles", "lessons": [ { "id": "s102l1", "title": "Foundations of learning science", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Explore how adults learn and the learning theory that underpins effective course design."] } ] },
+      { "id": "s102m2", "title": "Learner Needs Assessment", "lessons": [ { "id": "s102l2", "title": "Conducting practical needs assessments", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Gather the learner data you need to design training that solves real performance problems."] } ] },
+      { "id": "s102m3", "title": "Bloom's Revised Taxonomy", "lessons": [ { "id": "s102l3", "title": "Writing measurable learning outcomes", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Write clear, measurable learning outcomes using Bloom's Revised Taxonomy."] } ] },
+      { "id": "s102m4", "title": "Structuring Modules & Assessments", "lessons": [ { "id": "s102l4", "title": "Module structure, lesson plans and formative evaluation", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Structure course modules, lesson plans and formative evaluations that flow logically and build mastery."] } ] }
+    ]
+  },
+  {
+    "id": 103,
+    "title": "AI for Educators",
+    "tagline": "Save preparation hours and personalise support with generative AI.",
+    "desc": "Understand how emerging generative AI technologies can save hours of preparation, personalize student support, and enhance pedagogical design responsibly.",
+    "price": "\u20a625,000",
+    "priceNum": 25000,
+    "duration": "3 Weeks",
+    "level": "All Levels",
+    "format": "Hands-on Workshops & Prompt Templates",
+    "cat": "ai-tech",
+    "published": true,
+    "modules": [
+      { "id": "s103m1", "title": "Prompt Engineering for Educators", "lessons": [ { "id": "s103l1", "title": "Core principles of prompt engineering", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Learn to write prompts that produce useful, accurate and classroom-ready output."] } ] },
+      { "id": "s103m2", "title": "Automating Preparation", "lessons": [ { "id": "s103l2", "title": "Lesson plans, rubrics and quiz generation", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Automate lesson planning, rubrics and quiz generation with proven AI workflows."] } ] },
+      { "id": "s103m3", "title": "Differentiation & Feedback", "lessons": [ { "id": "s103l3", "title": "AI tools for differentiated learning", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Use AI to differentiate learning and give faster, more personalised student feedback."] } ] },
+      { "id": "s103m4", "title": "AI Ethics & Policy", "lessons": [ { "id": "s103l4", "title": "Academic integrity and AI policy guidelines", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Develop practical guidelines for academic integrity, ethics and responsible AI use."] } ] }
+    ]
+  },
+  {
+    "id": 104,
+    "title": "LMS for Course Creators",
+    "tagline": "Set up, structure and monetise an LMS without technical overwhelm.",
+    "desc": "Master the setup, content structuring, student management, and assessment workflows on modern Learning Management Systems without technical overwhelm.",
+    "price": "\u20a630,000",
+    "priceNum": 30000,
+    "duration": "3 Weeks",
+    "level": "Intermediate",
+    "format": "Live Walkthroughs + Setup Blueprints",
+    "cat": "teaching",
+    "published": true,
+    "modules": [
+      { "id": "s104m1", "title": "Choosing Your LMS", "lessons": [ { "id": "s104l1", "title": "Selecting the best LMS for your business model", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Compare LMS platforms and pick the one that fits your courses and business model."] } ] },
+      { "id": "s104m2", "title": "Course Architecture", "lessons": [ { "id": "s104l2", "title": "Module navigation and drip scheduling", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Structure course architecture, module navigation and drip scheduling for a clean learning path."] } ] },
+      { "id": "s104m3", "title": "Payments & Certificates", "lessons": [ { "id": "s104l3", "title": "Payment gateways, automated certificates and quizzes", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Integrate payment gateways, automated certificates and quizzes so your courses sell themselves."] } ] },
+      { "id": "s104m4", "title": "Student Tracking & Retention", "lessons": [ { "id": "s104l4", "title": "Analytics and retention workflows", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Track student progress, run analytics and design retention workflows that keep learners coming back."] } ] }
+    ]
+  },
+  {
+    "id": 105,
+    "title": "Digital Skills for Teachers",
+    "tagline": "Practical confidence with the classroom technologies that matter.",
+    "desc": "Build digital confidence and master essential classroom technologies, interactive presentation tools, cloud collaboration, and digital assessment tools.",
+    "price": "\u20a620,000",
+    "priceNum": 20000,
+    "duration": "4 Weeks",
+    "level": "Beginner",
+    "format": "Practical Guided Exercises",
+    "cat": "digital-skills",
+    "published": true,
+    "modules": [
+      { "id": "s105m1", "title": "Cloud Classroom Workflows", "lessons": [ { "id": "s105l1", "title": "Google Workspace and Microsoft 365", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Use Google Workspace and Microsoft 365 for everyday classroom workflows."] } ] },
+      { "id": "s105m2", "title": "Interactive Presentation Tools", "lessons": [ { "id": "s105l2", "title": "Canva, Mentimeter and Genially", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Create interactive presentations with Canva, Mentimeter and Genially."] } ] },
+      { "id": "s105m3", "title": "Multimedia Learning Artifacts", "lessons": [ { "id": "s105l3", "title": "Designing engaging multimedia resources", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Design engaging multimedia learning artifacts that hold attention and aid understanding."] } ] },
+      { "id": "s105m4", "title": "Digital Assessment & Communication", "lessons": [ { "id": "s105l4", "title": "Gradebooks, feedback forms and parent communication", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Run digital gradebooks, feedback forms and parent communication that save time and build trust."] } ] }
+    ]
+  },
+  {
+    "id": 106,
+    "title": "eLearning Content Development",
+    "tagline": "Transform static curricula into interactive, SCORM-ready eLearning.",
+    "desc": "Transform static curricula into dynamic, interactive eLearning modules with storyboarding, multimedia authoring, and SCORM/xAPI packaging principles.",
+    "price": "\u20a640,000",
+    "priceNum": 40000,
+    "duration": "5 Weeks",
+    "level": "Intermediate",
+    "format": "Project-Based Portfolio Course",
+    "cat": "design",
+    "published": true,
+    "modules": [
+      { "id": "s106m1", "title": "Instructional Storyboarding", "lessons": [ { "id": "s106l1", "title": "Storyboarding and visual scripting", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Turn a curriculum outline into a visual storyboard ready for production."] } ] },
+      { "id": "s106m2", "title": "Interactive Authoring", "lessons": [ { "id": "s106l2", "title": "Micro-lessons and branching scenarios", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Author interactive micro-lessons and branching scenarios with accessible tools."] } ] },
+      { "id": "s106m3", "title": "Voiceover, Animation & Visuals", "lessons": [ { "id": "s106l3", "title": "Engaging audio and visual diagrams", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Design engaging voiceovers, animations and visual diagrams on a budget."] } ] },
+      { "id": "s106m4", "title": "SCORM/xAPI Packaging", "lessons": [ { "id": "s106l4", "title": "Exporting and troubleshooting SCORM modules", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Export, test and troubleshoot SCORM-compliant modules ready for any LMS."] } ] }
+    ]
+  },
+  {
+    "id": 107,
+    "title": "Online Tutoring & Academic Support",
+    "tagline": "Deliver high-impact 1-on-1 and small-group tutoring online.",
+    "desc": "Learn how to deliver high-impact, 1-on-1 and small-group online tutoring sessions that build student confidence, engagement, and foundational mastery.",
+    "price": "\u20a625,000",
+    "priceNum": 25000,
+    "duration": "3 Weeks",
+    "level": "All Levels",
+    "format": "Live Demonstration & Coaching",
+    "cat": "teaching",
+    "published": true,
+    "modules": [
+      { "id": "s107m1", "title": "Virtual Classroom Tools", "lessons": [ { "id": "s107l1", "title": "Digital whiteboarding mastery", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Master virtual classroom tools and digital whiteboarding for live teaching."] } ] },
+      { "id": "s107m2", "title": "Diagnostic Assessment", "lessons": [ { "id": "s107l2", "title": "Strategies to pinpoint student gaps", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Use diagnostic assessment strategies to pinpoint and fix student learning gaps."] } ] },
+      { "id": "s107m3", "title": "Session Structuring & Pacing", "lessons": [ { "id": "s107l3", "title": "Pacing and interactive question techniques", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Structure sessions, control pacing and keep learners engaged with interactive questioning."] } ] },
+      { "id": "s107m4", "title": "Parent Communication & Client Base", "lessons": [ { "id": "s107l4", "title": "Progress reports and building a tutoring client base", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Communicate progress with parents and build a sustainable tutoring client base."] } ] }
+    ]
+  },
+  {
+    "id": 108,
+    "title": "Digital Product Creation",
+    "tagline": "Turn your knowledge into workbooks, toolkits and mini-courses.",
+    "desc": "Turn your specialized knowledge and teaching assets into high-value digital products such as workbooks, toolkits, mini-courses, and masterclasses.",
+    "price": "\u20a635,000",
+    "priceNum": 35000,
+    "duration": "4 Weeks",
+    "level": "Intermediate",
+    "format": "Step-by-Step Creation Accelerator",
+    "cat": "business",
+    "published": true,
+    "modules": [
+      { "id": "s108m1", "title": "Validating Knowledge Offers", "lessons": [ { "id": "s108l1", "title": "Validating before you invest build time", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Validate your knowledge offer before investing time and money in building it."] } ] },
+      { "id": "s108m2", "title": "Packaging Digital Assets", "lessons": [ { "id": "s108l2", "title": "Templates, toolkits and workbooks", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Package digital templates, toolkits and workbooks that deliver real value."] } ] },
+      { "id": "s108m3", "title": "Pricing & Positioning", "lessons": [ { "id": "s108l3", "title": "Pricing models and packaging tiers", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Set pricing models, packaging tiers and positioning that match what buyers expect."] } ] },
+      { "id": "s108m4", "title": "Landing Pages & Delivery", "lessons": [ { "id": "s108l4", "title": "Frictionless delivery and simple landing pages", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Set up a simple landing page and frictionless digital delivery flow."] } ] }
+    ]
+  },
+  {
+    "id": 109,
+    "title": "Advanced Instructional Design",
+    "tagline": "Deepen mastery: scenarios, cognitive load and enterprise evaluation.",
+    "desc": "Deepen your learning science mastery with scenario-based learning, cognitive load optimization, competency-based curricula, and enterprise evaluation.",
+    "price": "\u20a650,000",
+    "priceNum": 50000,
+    "duration": "6 Weeks",
+    "level": "Advanced",
+    "format": "Masterclass + Capstone Peer Review",
+    "cat": "design",
+    "published": true,
+    "modules": [
+      { "id": "s109m1", "title": "Scenario-Based & Game-Informed Design", "lessons": [ { "id": "s109l1", "title": "Complex scenarios and game-informed frameworks", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Design complex scenario-based and game-informed instructional frameworks."] } ] },
+      { "id": "s109m2", "title": "Cognitive Load Optimization", "lessons": [ { "id": "s109l2", "title": "Sweller's Cognitive Load Theory in practice", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Apply Sweller's Cognitive Load Theory to make complex content easier to learn."] } ] },
+      { "id": "s109m3", "title": "Enterprise Evaluation", "lessons": [ { "id": "s109l3", "title": "Kirkpatrick's 4 Levels and ROI metrics", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Evaluate training with Kirkpatrick's 4 Levels and business ROI metrics."] } ] },
+      { "id": "s109m4", "title": "Curriculum Strategy & Stakeholders", "lessons": [ { "id": "s109l4", "title": "Enterprise curriculum mapping and stakeholder management", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Map enterprise curricula and manage stakeholders across the training lifecycle."] } ] }
+    ]
+  },
+  {
+    "id": 110,
+    "title": "AI-Powered Content Creation",
+    "tagline": "Produce scripts, graphics, podcasts and video in half the time.",
+    "desc": "Learn how to blend generative AI with educational design to produce scripts, instructional graphics, podcasts, and video snippets in half the time.",
+    "price": "\u20a630,000",
+    "priceNum": 30000,
+    "duration": "3 Weeks",
+    "level": "Intermediate",
+    "format": "Hands-on Labs & Workflow Blueprints",
+    "cat": "ai-tech",
+    "published": true,
+    "modules": [
+      { "id": "s110m1", "title": "Multimodal AI Tools", "lessons": [ { "id": "s110l1", "title": "Image, audio and video synthesis", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Explore multimodal AI tools for image, audio and video synthesis."] } ] },
+      { "id": "s110m2", "title": "Consistent Visual Assets", "lessons": [ { "id": "s110l2", "title": "Slides, infographics and job aids", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Generate consistent visual slides, infographics and job aids for your courses."] } ] },
+      { "id": "s110m3", "title": "Transcript-to-Summary Workflows", "lessons": [ { "id": "s110l3", "title": "Automated learning content workflows", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Build automated transcript-to-summary workflows that turn recordings into lessons."] } ] },
+      { "id": "s110m4", "title": "QA for AI Output", "lessons": [ { "id": "s110l4", "title": "Preventing AI inaccuracies", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Apply quality assurance methods to prevent AI inaccuracies in learning content."] } ] }
+    ]
+  },
+  {
+    "id": 111,
+    "title": "Digital Productivity for Professionals",
+    "tagline": "Second brains, automation and systems that save you hours weekly.",
+    "desc": "Streamline administrative work, research, content curation, and schedule management with intelligent workflows and productivity systems.",
+    "price": "\u20a620,000",
+    "priceNum": 20000,
+    "duration": "2 Weeks",
+    "level": "All Levels",
+    "format": "Practical Daily Habits & Systems",
+    "cat": "digital-skills",
+    "published": true,
+    "modules": [
+      { "id": "s111m1", "title": "Building a Second Brain", "lessons": [ { "id": "s111l1", "title": "Your personal research and reference system", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Build a second brain for educational research and instant reference."] } ] },
+      { "id": "s111m2", "title": "Automating Admin Work", "lessons": [ { "id": "s111l2", "title": "Repetitive administrative and reporting tasks", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Automate repetitive administrative and reporting tasks with simple workflows."] } ] },
+      { "id": "s111m3", "title": "Time & Attention Defense", "lessons": [ { "id": "s111l3", "title": "Task batching, calendar defense and async collaboration", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Batch tasks, defend your calendar and collaborate asynchronously without context switching."] } ] },
+      { "id": "s111m4", "title": "Cloud Storage Hygiene", "lessons": [ { "id": "s111l4", "title": "Instant file retrieval structures", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Organise cloud storage so every file is retrievable in seconds."] } ] }
+    ]
+  },
+  {
+    "id": 112,
+    "title": "Video Course Production",
+    "tagline": "Professional educational videos with the equipment you already have.",
+    "desc": "Produce clear, professional educational videos with accessible equipment, crisp audio recording, engaging slide capture, and focused editing.",
+    "price": "\u20a635,000",
+    "priceNum": 35000,
+    "duration": "4 Weeks",
+    "level": "Intermediate",
+    "format": "Studio Walkthrough & Video Labs",
+    "cat": "business",
+    "published": true,
+    "modules": [
+      { "id": "s112m1", "title": "Budget-Friendly Studio Setup", "lessons": [ { "id": "s112l1", "title": "Lighting, microphones and webcams", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Configure budget-friendly lighting, microphones and webcam positioning."] } ] },
+      { "id": "s112m2", "title": "On-Camera Delivery", "lessons": [ { "id": "s112l2", "title": "Teleprompter scripts, pacing and confidence", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Write teleprompter scripts, control pacing and build on-camera confidence."] } ] },
+      { "id": "s112m3", "title": "Recording & Editing", "lessons": [ { "id": "s112l3", "title": "Screen recording and lightweight editing", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Record your screen and edit videos with lightweight, accessible workflows."] } ] },
+      { "id": "s112m4", "title": "Export & Streaming", "lessons": [ { "id": "s112l4", "title": "Optimised video formats for web streaming", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Export optimised video formats for seamless web streaming on any platform."] } ] }
+    ]
+  },
+  {
+    "id": 113,
+    "title": "LMS Administration & Management",
+    "tagline": "Roles, cohorts, gradebooks, security and LMS integrations — deep.",
+    "desc": "In-depth training on user roles, cohort enrollment, gradebook formulas, database backups, security protocols, and third-party API plugins.",
+    "price": "\u20a645,000",
+    "priceNum": 45000,
+    "duration": "5 Weeks",
+    "level": "Advanced",
+    "format": "System Configuration & Simulation",
+    "cat": "teaching",
+    "published": true,
+    "modules": [
+      { "id": "s113m1", "title": "User & Role Management", "lessons": [ { "id": "s113l1", "title": "RBAC and user lifecycle management", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Configure role-based access control (RBAC) and manage the full user lifecycle."] } ] },
+      { "id": "s113m2", "title": "Gradebooks & Transcripts", "lessons": [ { "id": "s113l2", "title": "Weighted categories, scales and automated transcripts", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Set up weighted categories, scales and automated transcripts in the gradebook."] } ] },
+      { "id": "s113m3", "title": "Integrations", "lessons": [ { "id": "s113l3", "title": "Zoom, Google Meet and payment gateways", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Integrate the LMS with Zoom, Google Meet and payment gateways."] } ] },
+      { "id": "s113m4", "title": "Reporting & Compliance", "lessons": [ { "id": "s113l4", "title": "Completion analytics and compliance audits", "mins": 15, "video": { "type": "none", "url": "" }, "content": ["Build data reports, learner completion analytics and compliance audit readiness."] } ] }
+    ]
+  }
+]

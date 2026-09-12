@@ -18,6 +18,7 @@
     course: "Course Editor",
     students: "Students",
     certificates: "Certificates",
+    blog: "Blog",
     settings: "Settings"
   };
 
@@ -194,6 +195,7 @@
     else if (route.name === "course") { setActiveNav("course"); renderCourseEditor(route.a); }
     else if (route.name === "students") { setActiveNav("students"); renderStudents(); }
     else if (route.name === "certificates") { setActiveNav("certificates"); renderCertificates(); }
+    else if (route.name === "blog") { setActiveNav("blog"); renderBlog(); }
     else if (route.name === "settings") { setActiveNav("settings"); renderSettings(); }
     else navigate("#overview");
     paintStorage();
@@ -306,6 +308,29 @@
 
   /* ---------------- courses list ---------------- */
 
+  function loadSeedCatalog() {
+    var url = new URL("seed-data.json", window.location.href).href;
+    fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (seedList) {
+        var res = S.importSeedCatalog(seedList);
+        if (!res.ok) { toast(res.error, true); return; }
+        if (res.imported === 0) {
+          toast(res.message || "Sample catalog already loaded.");
+          render();
+          return;
+        }
+        toast("Imported " + res.imported + " sample course" + (res.imported === 1 ? "" : "s") + (res.skipped ? " \u00b7 " + res.skipped + " skipped (already present)" : "") + ".");
+        render();
+      })
+      .catch(function (err) {
+        toast("Could not load seed-data.json \u2014 " + err.message, true);
+      });
+  }
+
   function renderCourses() {
     var catalog = S.listCatalog();
     var rows = catalog.map(function (c) {
@@ -319,7 +344,7 @@
         : sum.modules + " modules \u00b7 " + sum.lessons + " lessons \u00b7 " + sum.exams + " exams";
       return (
         '<tr>' +
-        '<td><div class="a-row-main"><img class="a-thumb" src="' + (c.image || "images/hero.jpg") + '" alt="">' +
+        '<td><div class="a-row-main">' +
         '<div><div class="td-title">' + esc(c.title) + (isProduct ? ' <span class="a-chip a-chip--gold">Product</span>' : "") + "</div>" +
         '<div class="is-muted" style="font-size:12px">#' + c.id + " \u00b7 " + priceLabel + "</div></div></div></td>" +
         '<td><span class="a-chip">' + structLabel + "</span></td>" +
@@ -342,6 +367,7 @@
       '<p class="a-view__sub">Create courses, build modules, attach lessons &amp; videos, and add an exam after each module.</p></div>' +
       '<div class="a-toolbar" style="margin:0">' +
       '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " New Course</button>" +
+      '<button class="a-btn a-btn--ghost" data-act="course-seed" title="Load the 13-course sample catalog from seed-data.json">' + ICONS.download + " Load Sample Catalog</button>" +
       "</div></div>" +
 
       (catalog.length
@@ -352,7 +378,9 @@
         : '<div class="a-empty">' + ICONS.book +
           "<h4>No courses yet</h4><p>Create and publish your first course \u2014 it will appear on the public pages and in student dashboards.</p>" +
           '<div class="a-toolbar" style="justify-content:center">' +
-          '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " Create Course</button></div></div>") +
+          '<button class="a-btn a-btn--primary" data-act="course-new">' + ICONS.add + " Create Course</button>" +
+          '<button class="a-btn a-btn--ghost" data-act="course-seed">' + ICONS.download + " Load Sample Catalog</button>" +
+          "</div></div>") +
 
       '<div class="a-alert a-alert--info" style="margin-top:18px">' + ICONS.info +
       "<span>Only courses you create and publish here appear on the public pages, in the course catalog and in student dashboards.</span></div>";
@@ -544,10 +572,6 @@
     }
     if (!draft.modules) draft.modules = [];
 
-    var imgBlock = draft.image
-      ? '<div class="a-thumb-preview"><img src="' + esc(draft.image) + '" alt=""><span class="a-hint">Current thumbnail</span></div>'
-      : "";
-
     appView.innerHTML =
       '<div class="a-view__head"><div><h2 class="a-view__title">' + (routeId && routeId !== "new" ? "Edit" : "New") + " Course</h2>" +
       '<p class="a-view__sub">#' + draft.id + " \u00b7 " + (draft.published !== false ? "Published" : "Draft") + "</p></div>" +
@@ -593,10 +617,6 @@
       "</div>" +
 
       '<div class="a-form-row" style="margin-top:14px">' +
-      '<div class="a-field"><label class="a-label">Course image <span class="a-hint">(max <b>10 MB</b>)</span></label>' +
-      '<label class="a-upload"><input type="file" accept="image/*" data-filepath="image" data-filefield="image" data-filelabel="image" data-filepreview="imagePrev">' +
-      '<span class="a-upload__label">' + ICONS.upload + " " + (draft.image ? "Replace image" : "Upload image") + "</span>" +
-      '<span class="a-upload__note">JPG / PNG / WebP \u00b7 Max size: <b>10 MB</b></span></label>' + imgBlock + "</div>" +
       '<div class="a-field"><span class="a-toggle" style="margin-top:20px"><input type="checkbox" data-path="featured" data-type="bool"' + (draft.featured ? " checked" : "") + '> Featured on the site</span>' +
       '<span class="a-toggle"><input type="checkbox" data-path="published" data-type="bool"' + (draft.published !== false ? " checked" : "") + '> Published (visible to students)</span></div>' +
       "</div></div></div>" +
@@ -643,9 +663,6 @@
 
   function renderProductEditor(routeId) {
     if (!draft.options) draft.options = [{ label: "", price: "\u20a6", priceNum: 0, desc: "" }];
-    var imgBlock = draft.image
-      ? '<div class="a-thumb-preview"><img src="' + esc(draft.image) + '" alt=""><span class="a-hint">Current thumbnail</span></div>'
-      : "";
 
     appView.innerHTML =
       '<div class="a-view__head"><div><h2 class="a-view__title">' + (routeId && routeId !== "new" ? "Edit" : "New") + " Digital Product</h2>" +
@@ -672,10 +689,6 @@
       '<textarea class="a-input" data-path="desc" placeholder="What is this digital product and who is it for?">' + esc(draft.desc || "") + "</textarea></div>" +
 
       '<div class="a-form-row" style="margin-top:14px">' +
-      '<div class="a-field"><label class="a-label">Course image <span class="a-hint">(max <b>10 MB</b>)</span></label>' +
-      '<label class="a-upload"><input type="file" accept="image/*" data-filepath="image" data-filefield="image" data-filelabel="image" data-filepreview="imagePrev">' +
-      '<span class="a-upload__label">' + ICONS.upload + " " + (draft.image ? "Replace image" : "Upload image") + "</span>" +
-      '<span class="a-upload__note">JPG / PNG / WebP \u00b7 Max size: <b>10 MB</b></span></label>' + imgBlock + "</div>" +
       '<div class="a-field"><span class="a-toggle" style="margin-top:20px"><input type="checkbox" data-path="featured" data-type="bool"' + (draft.featured ? " checked" : "") + '> Featured on the site</span>' +
       '<span class="a-toggle"><input type="checkbox" data-path="published" data-type="bool"' + (draft.published !== false ? " checked" : "") + '> Published (visible to students)</span></div>' +
       "</div></div></div>" +
@@ -888,6 +901,97 @@
         : '<div class="a-empty"><h4>No courses available</h4><p>Create a course to start managing its certificate.</p></div>');
   }
 
+  /* ---------------- blog ---------------- */
+
+  function renderBlog() {
+    var posts = S.getBlogPosts();
+    var rows = posts.map(function (p) {
+      var tags = (p.tags || []).slice(0, 3).join(", ");
+      return (
+        "<tr>" +
+        '<td><div class="a-row-main"><div><div class="td-title">' + esc(p.title) + "</div>" +
+        '<div class="is-muted" style="font-size:12px">' + esc(p.category) + " \u00b7 " + esc(p.author) + "</div></div></div></td>" +
+        '<td class="is-muted">' + esc(p.date || "\u2014") + "</td>" +
+        '<td><span class="a-chip">' + esc(p.readTime || "\u2014") + "</span></td>" +
+        '<td class="is-muted">' + (tags ? esc(tags) : "\u2014") + "</td>" +
+        '<td><div class="cell-actions">' +
+        '<button class="a-btn a-btn--outline a-btn--sm" data-act="blog-edit" data-id="' + esc(p.id) + '">' + ICONS.edit + " Edit</button>" +
+        '<button class="a-btn a-btn--ghost a-btn--sm a-btn--danger" data-act="blog-delete" data-id="' + esc(p.id) + '">' + ICONS.trash + "</button>" +
+        "</div></td></tr>"
+      );
+    }).join("");
+
+    appView.innerHTML =
+      '<div class="a-view__head"><div><h2 class="a-view__title">Blog Posts</h2>' +
+      '<p class="a-view__sub">Publish and manage articles that appear on the website blog.</p></div>' +
+      '<div class="a-toolbar" style="margin:0"><button class="a-btn a-btn--primary" data-act="blog-new">' + ICONS.add + " New Post</button></div></div>" +
+      (posts.length
+        ? '<div class="a-table-wrap"><table class="a-table"><thead><tr>' +
+          "<th>Post</th><th>Date</th><th>Read time</th><th>Tags</th><th>Action</th></tr></thead>" +
+          "<tbody>" + rows + "</tbody></table></div>"
+        : '<div class="a-empty"><h4>No blog posts yet</h4><p>Click \u201cNew Post\u201d to publish your first article \u2014 it will appear on the website immediately.</p></div>');
+  }
+
+  function openBlogPost(post) {
+    var d = post || {
+      id: "", title: "", excerpt: "", content: "",
+      category: "News", author: "EdTech Training Hub Team",
+      tags: [], date: "", readTime: ""
+    };
+    var tagsVal = (d.tags || []).join(", ");
+    openModal(
+      '<div class="a-modal" role="dialog" aria-modal="true" style="max-width:700px">' +
+      '<div class="a-modal__head"><h3>' + (post ? "Edit Blog Post" : "New Blog Post") + "</h3>" +
+      '<button class="icon-btn" data-modal-cancel aria-label="Close">' + ICONS.x + "</button></div>" +
+      '<div class="a-modal__body">' +
+      '<div class="a-field"><label class="a-label">Title *</label>' +
+      '<input class="a-input" id="blogTitle" value="' + esc(d.title) + '" maxlength="140"></div>' +
+      '<div class="a-field"><label class="a-label">Excerpt *</label>' +
+      '<textarea class="a-input" id="blogExcerpt" rows="2" maxlength="280">' + esc(d.excerpt) + "</textarea></div>" +
+      '<div class="a-field"><label class="a-label">Content * <span class="a-hint">(separate paragraphs with a blank line)</span></label>' +
+      '<textarea class="a-input" id="blogContent" rows="12" style="font-family:inherit">' + esc(d.content) + "</textarea></div>" +
+      '<div class="a-grid" style="grid-template-columns:1fr 1fr;gap:12px">' +
+      '<div class="a-field"><label class="a-label">Category</label>' +
+      '<input class="a-input" id="blogCategory" value="' + esc(d.category) + '" list="blogCats" placeholder="e.g. AI &amp; Technology">' +
+      '<datalist id="blogCats">' + ["AI & Technology", "Digital Skills", "Course Creation", "LMS", "Online Teaching", "Instructional Design", "News"].map(function (c) { return '<option value="' + esc(c) + '">'; }).join("") + "</datalist></div>" +
+      '<div class="a-field"><label class="a-label">Author</label>' +
+      '<input class="a-input" id="blogAuthor" value="' + esc(d.author) + '"></div></div>' +
+      '<div class="a-field"><label class="a-label">Tags <span class="a-hint">(comma separated)</span></label>' +
+      '<input class="a-input" id="blogTags" value="' + esc(tagsVal) + '" placeholder="AI, Education, Nigeria"></div>' +
+      "</div>" +
+      '<div class="a-modal__foot">' +
+      '<button class="a-btn a-btn--ghost" data-modal-cancel>Cancel</button>' +
+      '<button class="a-btn a-btn--primary" data-blog-save>' + ICONS.check + " " + (post ? "Save Changes" : "Publish Post") + "</button>" +
+      "</div></div>"
+    );
+    var overlay = document.getElementById("aOverlay");
+    overlay.querySelector("[data-blog-save]").addEventListener("click", function () {
+      var title = document.getElementById("blogTitle").value.trim();
+      var content = document.getElementById("blogContent").value.trim();
+      if (!title) { toast("Please give the post a title.", true); return; }
+      if (!content) { toast("Please write some body content.", true); return; }
+      var words = content.split(/\s+/).filter(Boolean).length;
+      var readTime = Math.max(1, Math.round(words / 200)) + " min read";
+      var tags = document.getElementById("blogTags").value.split(",").map(function (t) { return t.trim(); }).filter(Boolean);
+      var res = S.saveBlogPost({
+        id: d.id,
+        title: title,
+        excerpt: document.getElementById("blogExcerpt").value.trim() || title,
+        content: content,
+        category: document.getElementById("blogCategory").value.trim() || "News",
+        author: document.getElementById("blogAuthor").value.trim() || "EdTech Training Hub Team",
+        date: d.date || new Date().toISOString().slice(0, 10),
+        readTime: readTime,
+        tags: tags
+      });
+      if (!res.ok) { toast(res.error, true); return; }
+      closeModal();
+      toast("Blog post published \u2014 it is live on the website.");
+      render();
+    });
+    overlay.querySelectorAll("[data-modal-cancel]").forEach(function (b) { b.addEventListener("click", closeModal); });
+  }
+
   /* ---------------- settings ---------------- */
 
   function renderSettings() {
@@ -943,7 +1047,7 @@
   function parseVal(el, val, path) {
     var t = el.getAttribute("data-type") || el.getAttribute("data-textpath") ? "txt" : "";
     if (el.hasAttribute("data-textpath")) return String(val || "").split("\n");
-    if (t === "bool") return val === true || val === "true" || val === "on";
+    if (t === "bool") return el.type === "checkbox" || el.type === "radio" ? el.checked : val === true || val === "true";
     if (t === "num" || /(mins|passMark|priceNum)$/.test(path)) return Number(val) || 0;
     if (el.type === "checkbox" || el.type === "radio") return el.checked;
     if (el.type === "number") return Number(val) || 0;
@@ -984,30 +1088,16 @@
       var oldType = (old && old.type) || null;
       S.readFileAsDataUrl(file, { label: label }).then(function (res) {
         if (!res.ok) { toast(res.error, true); return; }
-        var target = {};
-        if (path === "image") {
-          draft.image = res.dataUrl;
-        } else {
-          var obj = (old && (typeof old === "object")) ? old : { type: oldType || "file", url: "" };
-          obj.type = "file";
-          obj[field] = res.dataUrl;
-          obj.fileName = res.fileName;
-          obj.size = res.size;
-          obj.mime = res.mime;
-          setPath(draft, path, obj);
-        }
+        var obj = (old && (typeof old === "object")) ? old : { type: oldType || "file", url: "" };
+        obj.type = "file";
+        obj[field] = res.dataUrl;
+        obj.fileName = res.fileName;
+        obj.size = res.size;
+        obj.mime = res.mime;
+        setPath(draft, path, obj);
         renderModulesPanel();
         var preview = document.getElementById("moduleWrap");
-        if (preview) toast((label === "video" ? "Video" : "Image") + " added \u2014 " + S.fmtBytes(res.size));
-        if (draft.image) {
-          var wrap = document.querySelector(".a-form-row .a-field .a-thumb-preview");
-          if (wrap) wrap.remove();
-          var imgField = document.querySelector('.a-field input[data-filepath="image"]');
-          if (imgField) {
-            imgField.parentElement.insertAdjacentHTML("beforeend",
-              '<div class="a-thumb-preview"><img src="' + esc(res.dataUrl) + '" alt=""><span class="a-hint">New thumbnail</span></div>');
-          }
-        }
+        if (preview) toast((label === "video" ? "Video" : "File") + " added \u2014 " + S.fmtBytes(res.size));
       });
     }
   });
@@ -1067,6 +1157,9 @@
       case "course-new":
         openNewCourseChooser();
         break;
+      case "course-seed":
+        loadSeedCatalog();
+        break;
       case "course-edit":
         navigate("#course/" + el.getAttribute("data-id"));
         break;
@@ -1075,7 +1168,8 @@
         if (!dup.ok) toast(dup.error, true); else { toast("Course duplicated."); render(); }
         break;
       case "course-publish":
-        var pub = S.setPublished(el.getAttribute("data-id"), el.textContent.indexOf("Publish") !== -1);
+        var shouldPublish = el.textContent.trim() === "Publish";
+        var pub = S.setPublished(el.getAttribute("data-id"), shouldPublish);
         if (!pub.ok) toast(pub.error, true); else render();
         break;
       case "course-delete":
@@ -1287,6 +1381,29 @@
           onOk: function () {
             S.wipeAll();
             window.location.href = "login.html";
+          }
+        });
+        break;
+
+      case "blog-new":
+        openBlogPost();
+        break;
+      case "blog-edit":
+        var blogList = S.getBlogPosts();
+        var bp = null;
+        for (var bi = 0; bi < blogList.length; bi++) {
+          if (blogList[bi].id === el.getAttribute("data-id")) { bp = blogList[bi]; break; }
+        }
+        if (bp) openBlogPost(bp); else toast("Blog post not found.", true);
+        break;
+      case "blog-delete":
+        confirmModal({
+          title: "Delete blog post?",
+          body: "This removes the article from the website immediately.",
+          okClass: "a-btn--danger",
+          onOk: function () {
+            var bd = S.deleteBlogPost(el.getAttribute("data-id"));
+            if (!bd.ok) toast(bd.error, true); else { toast("Blog post deleted."); render(); }
           }
         });
         break;

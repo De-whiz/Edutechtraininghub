@@ -15,7 +15,8 @@
     certTemplates: "eth_cert_templates",
     users: "eth_users",
     enroll: "eth_enroll",
-    progress: "eth_progress"
+    progress: "eth_progress",
+    blog: "eth_blog_posts"
   };
 
   var DEFAULT_USERNAME = "Edutech Admin";
@@ -323,7 +324,6 @@
       title: "",
       tagline: "",
       desc: "",
-      image: "",
       price: "\u20a6",
       priceNum: 0,
       duration: "4 weeks",
@@ -507,6 +507,53 @@
     return { stats: stats, top: top };
   }
 
+  /* ---------------- blog ---------------- */
+
+  function getBlogPosts() {
+    var list = read(KEYS.blog, []);
+    return Array.isArray(list) ? list : [];
+  }
+
+  function saveBlogPost(post) {
+    if (!post) return { ok: false, error: "No blog post to save." };
+    if (!String(post.title || "").trim()) {
+      return { ok: false, error: "Please give the post a title." };
+    }
+    if (!String(post.content || "").trim()) {
+      return { ok: false, error: "Please write some body content." };
+    }
+    var list = getBlogPosts();
+    post.id = String(post.id || ("blog_" + Date.now()));
+    post.date = String(post.date || new Date().toISOString().slice(0, 10));
+    post.readTime = String(post.readTime || "");
+    if (!Array.isArray(post.tags)) post.tags = [];
+    if (!String(post.category || "").trim()) post.category = "News";
+    if (!String(post.author || "").trim()) post.author = "EdTech Training Hub Team";
+
+    var found = false;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === post.id) { list[i] = post; found = true; break; }
+    }
+    if (!found) list.unshift(post);
+
+    var res = write(KEYS.blog, list);
+    if (!res.ok) return res;
+    logAction("Published blog \u201c" + post.title + "\u201d");
+    return { ok: true, post: post };
+  }
+
+  function deleteBlogPost(id) {
+    var list = getBlogPosts();
+    var kept = list.filter(function (p) { return p.id !== String(id); });
+    if (kept.length === list.length) {
+      return { ok: false, error: "Blog post not found." };
+    }
+    var res = write(KEYS.blog, kept);
+    if (!res.ok) return res;
+    logAction("Deleted a blog post");
+    return { ok: true };
+  }
+
   /* ---------------- activity log ---------------- */
 
   function getActions() {
@@ -524,7 +571,7 @@
   function exportAll() {
     var out = { exportedAt: Date.now(), data: {} };
     try {
-      var keysToExport = ["eth_users", "eth_enroll", "eth_progress", "eth_cart", "eth_activity", "eth_resets", KEYS.catalog, KEYS.seq, KEYS.certTemplates, KEYS.log, KEYS.account];
+      var keysToExport = ["eth_users", "eth_enroll", "eth_progress", "eth_cart", "eth_activity", "eth_resets", "eth_blog_posts", KEYS.catalog, KEYS.seq, KEYS.certTemplates, KEYS.log, KEYS.account];
       var seen = {};
       keysToExport.forEach(function (k) {
         if (seen[k]) return;
@@ -578,6 +625,72 @@
     } catch (e) {}
     seedAccount();
     return { ok: true };
+  }
+
+  /* ---------------- sample catalog import ---------------- */
+
+  function importSeedCatalog(seedList) {
+    if (!Array.isArray(seedList)) {
+      return { ok: false, error: "Seed file does not contain a course list." };
+    }
+    var list = listCatalog();
+    var imported = 0;
+    var skipped = 0;
+    var firstError = null;
+
+    seedList.forEach(function (seed) {
+      if (!seed || !String(seed.title || "").trim()) { skipped++; return; }
+      var exists = list.some(function (c) {
+        return String(c.title || "").trim().toLowerCase() === String(seed.title).trim().toLowerCase();
+      });
+      if (exists) { skipped++; return; }
+
+      var course = JSON.parse(JSON.stringify(seed));
+      course.type = "course";
+      course.published = course.published !== false;
+      course.featured = !!course.featured;
+      course.priceNum = Number(course.priceNum) || parsePriceNum(course.price);
+      course.price = course.price || "\u20a60";
+      if (!course.cat) course.cat = "digital-skills";
+      if (course.modules && Array.isArray(course.modules)) {
+        course.modules = course.modules.map(function (m, mi) {
+          return {
+            id: "m" + mi + "_" + course.id,
+            title: String(m.title || "Module " + (mi + 1)),
+            lessons: (m.lessons || []).map(function (l, li) {
+              return {
+                id: "l" + li + "_" + course.id,
+                title: String(l.title || "Lesson " + (li + 1)),
+                mins: Number(l.mins) > 0 ? Number(l.mins) : 15,
+                video: l.video || { type: "none", url: "" },
+                content: Array.isArray(l.content) && l.content.length ? l.content : [String(l.title || "Lesson " + (li + 1))]
+              };
+            }),
+            examEnabled: false
+          };
+        });
+      } else {
+        course.modules = [];
+      }
+
+      if (!Number(course.id) || Number(course.id) < 100) course.id = nextCourseId();
+      course.id = Number(course.id);
+
+      var hasId = list.some(function (c) { return c.id === course.id; });
+      if (hasId) course.id = nextCourseId();
+
+      list.push(course);
+      imported++;
+    });
+
+    if (!imported) {
+      return { ok: true, imported: 0, skipped: skipped, message: "Nothing to import \u2014 your catalog already has all sample courses." };
+    }
+
+    var res = write(KEYS.catalog, list);
+    if (!res.ok) return res;
+    logAction("Imported " + imported + " sample course" + (imported === 1 ? "" : "s"));
+    return { ok: true, imported: imported, skipped: skipped };
   }
 
   /* ---------------- statico helpers used by UI ---------------- */
@@ -645,6 +758,10 @@
     importAll: importAll,
     clearAdminData: clearAdminData,
     wipeAll: wipeAll,
-    summaryOf: summaryOf
+    importSeedCatalog: importSeedCatalog,
+    summaryOf: summaryOf,
+    getBlogPosts: getBlogPosts,
+    saveBlogPost: saveBlogPost,
+    deleteBlogPost: deleteBlogPost
   };
 })();
